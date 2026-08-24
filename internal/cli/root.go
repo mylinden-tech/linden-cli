@@ -9,10 +9,10 @@ import (
 	"github.com/itchyny/gojq"
 	"github.com/spf13/cobra"
 
-	"github.com/linden-family/linden-cli/internal/appctx"
-	"github.com/linden-family/linden-cli/internal/commands"
-	"github.com/linden-family/linden-cli/internal/config"
-	"github.com/linden-family/linden-cli/internal/output"
+	"github.com/mylinden-tech/linden-cli/internal/appctx"
+	"github.com/mylinden-tech/linden-cli/internal/commands"
+	"github.com/mylinden-tech/linden-cli/internal/config"
+	"github.com/mylinden-tech/linden-cli/internal/output"
 )
 
 // Execute runs the root command.

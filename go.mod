@@ -1,4 +1,4 @@
-module github.com/linden-family/linden-cli
+module github.com/mylinden-tech/linden-cli
 
 go 1.25.0
 

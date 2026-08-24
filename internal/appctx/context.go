@@ -7,10 +7,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/linden-family/linden-cli/internal/auth"
-	"github.com/linden-family/linden-cli/internal/client"
-	"github.com/linden-family/linden-cli/internal/config"
-	"github.com/linden-family/linden-cli/internal/output"
+	"github.com/mylinden-tech/linden-cli/internal/auth"
+	"github.com/mylinden-tech/linden-cli/internal/client"
+	"github.com/mylinden-tech/linden-cli/internal/config"
+	"github.com/mylinden-tech/linden-cli/internal/output"
 )
 
 type contextKey string

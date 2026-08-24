@@ -8,7 +8,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
-	"github.com/linden-family/linden-cli/internal/client"
+	"github.com/mylinden-tech/linden-cli/internal/client"
 )
 
 // LoadedMsg carries persons loaded from the API.

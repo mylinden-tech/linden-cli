@@ -21,7 +21,7 @@ Output is designed for both humans (styled terminal tables) and machines (a cons
 There's no published install script or package yet, so build from source:
 
 ```sh
-git clone https://github.com/linden-family/linden-cli.git
+git clone https://github.com/mylinden-tech/linden-cli.git
 cd linden-cli
 make build       # builds ./bin/linden
 ```

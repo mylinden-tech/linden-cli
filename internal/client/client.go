@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/linden-family/linden-cli/internal/output"
+	"github.com/mylinden-tech/linden-cli/internal/output"
 )
 
 // TokenProvider supplies access tokens.

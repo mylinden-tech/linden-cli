@@ -15,7 +15,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/linden-family/linden-cli/internal/config"
+	"github.com/mylinden-tech/linden-cli/internal/config"
 )
 
 const (

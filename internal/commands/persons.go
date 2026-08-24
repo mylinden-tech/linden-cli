@@ -8,11 +8,11 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"github.com/spf13/cobra"
 
-	"github.com/linden-family/linden-cli/internal/appctx"
-	"github.com/linden-family/linden-cli/internal/client"
-	"github.com/linden-family/linden-cli/internal/output"
-	"github.com/linden-family/linden-cli/internal/tui"
-	personsTUI "github.com/linden-family/linden-cli/internal/tui/persons"
+	"github.com/mylinden-tech/linden-cli/internal/appctx"
+	"github.com/mylinden-tech/linden-cli/internal/client"
+	"github.com/mylinden-tech/linden-cli/internal/output"
+	"github.com/mylinden-tech/linden-cli/internal/tui"
+	personsTUI "github.com/mylinden-tech/linden-cli/internal/tui/persons"
 )
 
 // NewPersonsCmd creates the persons command group.

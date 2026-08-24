@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/linden-family/linden-cli/internal/appctx"
-	"github.com/linden-family/linden-cli/internal/output"
+	"github.com/mylinden-tech/linden-cli/internal/appctx"
+	"github.com/mylinden-tech/linden-cli/internal/output"
 )
 
 // isMachineOutput returns true when output should be machine-readable.
