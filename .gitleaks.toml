@@ -1,0 +1,10 @@
+[extend]
+useDefault = true
+
+# Auth0 public native OAuth client ID — not a secret. See
+# internal/auth/auth.go for context. Applies regardless of which commit
+# introduced the string, since gitleaks scans full git history.
+[allowlist]
+regexes = [
+  '''GfAn4MFKnC57zlqIissU9x8WuS1z0KTA''',
+]

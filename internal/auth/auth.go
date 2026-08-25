@@ -21,7 +21,7 @@ import (
 const (
 	// Auth0 application credentials (public native client — not a secret).
 	auth0Domain   = "auth.mylinden.family"
-	auth0ClientID = "GfAn4MFKnC57zlqIissU9x8WuS1z0KTA" //nolint:gosec // G101: public OAuth client ID
+	auth0ClientID = "GfAn4MFKnC57zlqIissU9x8WuS1z0KTA" //nolint:gosec // G101: public OAuth client ID //gitleaks:allow
 	auth0Audience = "https://mylinden.family"
 
 	// OAuth callback server

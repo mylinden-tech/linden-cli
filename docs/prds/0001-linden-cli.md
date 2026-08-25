@@ -78,7 +78,7 @@ The CLI is modeled structurally and stylistically after the basecamp-cli, using 
 
 - `linden auth login` starts a local HTTP server on `http://localhost:3009/callback`, constructs the Auth0 authorize URL with PKCE challenge, opens the browser, waits for the callback, exchanges the code for tokens, and persists them.
 - Auth0 domain: `auth.mylinden.family`
-- Auth0 client ID: `GfAn4MFKnC57zlqIissU9x8WuS1z0KTA`
+- Auth0 client ID: `GfAn4MFKnC57zlqIissU9x8WuS1z0KTA` <!-- public native client, not a secret; gitleaks:allow -->
 - Redirect URI: `http://localhost:3009/callback`
 - Token storage: system keyring preferred, `~/.config/linden/credentials.json` as fallback.
 - `LINDEN_TOKEN` env var bypasses the entire flow for CI/service account use.

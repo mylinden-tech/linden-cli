@@ -1,0 +1,32 @@
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - 'docs/**'
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'go.mod'
+          - 'go.sum'
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: '.github/workflows/**'
+
+release:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.goreleaser.yml'
+          - 'scripts/install.sh'
+
+tui:
+  - changed-files:
+      - any-glob-to-any-file: 'internal/tui/**'
+
+cli:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'cmd/**'
+          - 'internal/commands/**'
+          - 'internal/cli/**'
