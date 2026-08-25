@@ -1,0 +1,64 @@
+version: 2
+
+project_name: linden
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: linden
+    main: ./cmd/linden
+    binary: linden
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+
+archives:
+  - id: linden
+    formats: [tar.gz]
+    name_template: >-
+      {{ .ProjectName }}_{{ .Os }}_{{ .Arch }}
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+
+release:
+  github:
+    owner: mylinden-tech
+    name: linden-cli
+
+brews:
+  - name: linden
+    repository:
+      owner: mylinden-tech
+      name: homebrew-tap
+      branch: main
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    directory: Formula
+    homepage: "https://www.mylinden.family/"
+    description: "Command-line interface for Linden Family"
+    license: "MIT"
+    test: |
+      system "#{bin}/linden", "--version"

@@ -14,22 +14,32 @@ Output is designed for both humans (styled terminal tables) and machines (a cons
 
 ## Requirements
 
-- Go 1.25 or later (no prebuilt binaries yet — see [Installation](#installation))
+- macOS or Linux (amd64/arm64) for prebuilt binaries; Go 1.25+ if building from source
 
 ## Installation
 
-There's no published install script or package yet, so build from source:
+**Homebrew (macOS / Linux):**
+
+```sh
+brew tap mylinden-tech/tap
+brew install linden
+```
+
+**curl script (macOS / Linux):**
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/mylinden-tech/linden-cli/main/scripts/install.sh | bash
+```
+
+This downloads the latest release for your OS/arch and installs it to `/usr/local/bin` (falling back to `~/.local/bin` if that isn't writable). Override the destination with `LINDEN_INSTALL_DIR`.
+
+**From source:**
 
 ```sh
 git clone https://github.com/mylinden-tech/linden-cli.git
 cd linden-cli
 make build       # builds ./bin/linden
-```
-
-Put it on your `$PATH`:
-
-```sh
-make install     # go install ./cmd/linden -> $GOBIN or $GOPATH/bin
+make install     # or: go install ./cmd/linden -> $GOBIN or $GOPATH/bin
 ```
 
 Or run it directly during development without building:
@@ -159,3 +169,7 @@ make tidy    # tidy go.mod/go.sum
 - **[gojq](https://github.com/itchyny/gojq)** — powers `--jq`
 - **[go-keyring](https://github.com/zalando/go-keyring)** — OS keychain credential storage
 - **Auth0** (OAuth 2.1 PKCE) — authentication against the Linden API
+
+## License
+
+[MIT](LICENSE)

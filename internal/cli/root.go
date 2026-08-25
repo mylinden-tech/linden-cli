@@ -15,9 +15,16 @@ import (
 	"github.com/mylinden-tech/linden-cli/internal/output"
 )
 
+// BuildInfo holds version metadata injected at build time.
+type BuildInfo struct {
+	Version string
+	Commit  string
+	Date    string
+}
+
 // Execute runs the root command.
-func Execute() {
-	cmd := NewRootCmd()
+func Execute(info BuildInfo) {
+	cmd := NewRootCmd(info)
 	if err := cmd.Execute(); err != nil {
 		emitError(err)
 		os.Exit(exitCode(err))
@@ -25,13 +32,14 @@ func Execute() {
 }
 
 // NewRootCmd builds the root cobra command.
-func NewRootCmd() *cobra.Command {
+func NewRootCmd(info BuildInfo) *cobra.Command {
 	var flags appctx.GlobalFlags
 
 	cmd := &cobra.Command{
 		Use:           "linden",
 		Short:         "Command-line interface for Linden Family",
 		Long:          "linden is a CLI for managing your Linden Family accounts and persons.",
+		Version:       fmt.Sprintf("%s (commit %s, built %s)", info.Version, info.Commit, info.Date),
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
