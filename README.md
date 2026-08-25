@@ -25,6 +25,14 @@ brew tap mylinden-tech/tap
 brew install linden
 ```
 
+> Since Homebrew 6.0, new taps aren't trusted by default (see [Tap Trust](https://docs.brew.sh/Tap-Trust)). If `brew install` fails with `Refusing to load formula ... from untrusted tap`, run:
+>
+> ```sh
+> brew trust --formula mylinden-tech/tap/linden
+> ```
+>
+> then retry the install. Use `brew trust mylinden-tech/tap` instead if you want to trust all current and future formulae from this tap.
+
 **curl script (macOS / Linux):**
 
 ```sh
