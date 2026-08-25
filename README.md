@@ -18,7 +18,14 @@ Output is designed for both humans (styled terminal tables) and machines (a cons
 
 ## Installation
 
-**macOS / Linux:**
+**Homebrew (macOS / Linux):**
+
+```sh
+brew tap mylinden-tech/tap
+brew install linden
+```
+
+**curl script (macOS / Linux):**
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/mylinden-tech/linden-cli/main/scripts/install.sh | bash

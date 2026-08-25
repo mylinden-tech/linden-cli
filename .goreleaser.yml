@@ -48,3 +48,17 @@ release:
   github:
     owner: mylinden-tech
     name: linden-cli
+
+brews:
+  - name: linden
+    repository:
+      owner: mylinden-tech
+      name: homebrew-tap
+      branch: main
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    directory: Formula
+    homepage: "https://www.mylinden.family/"
+    description: "Command-line interface for Linden Family"
+    license: "MIT"
+    test: |
+      system "#{bin}/linden", "--version"
