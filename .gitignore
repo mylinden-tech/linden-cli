@@ -1,17 +1,16 @@
-# Go workspace (for local SDK development)
+# Go workspace (local multi-module / SDK development)
 go.work
 go.work.sum
 
-# Built binaries
-bin/linden-cli
-bin/linden-cli-*
+# Built binaries (make build / local installs)
+bin/
 /linden-cli
 
-# GoReleaser output
+# GoReleaser release artifacts
 dist/
 .release-extra/
 
-# Test coverage
+# Test coverage reports
 coverage.out
 coverage.html
 
@@ -25,7 +24,22 @@ benchmarks-current.txt
 # Keep baseline for tracking
 # benchmarks-baseline.txt
 
-# Nix
+# Nix build result symlink
 result
 
+# macOS Finder metadata
 .DS_Store
+
+# Local dry-run output from scripts/publish-skills.sh.
+# Pass any directory as the script argument; these names are common scratch
+# folders and must not be committed. Real publish target is mylinden-tech/skills.
+# The dest folder must already exist. From the repo root:
+# mkdir -p .publish-staging
+# ./scripts/publish-skills.sh .publish-staging
+
+.publish-staging/
+publish-staging/
+
+# Local Cursor skill symlinks used for dogfooding (canonical skills live in skills/).
+# Shared Cursor rules under .cursor/rules/ are tracked.
+.cursor/*
