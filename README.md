@@ -10,11 +10,15 @@ Output is designed for both humans (styled terminal tables) and machines (a cons
 - **Structured output** — styled by default in a TTY, JSON envelope otherwise, plus `--md` and `--jq <expr>` for filtering
 - **Multi-account support** — switch the active account per-invocation (`--account`) or persist it globally/locally
 - **Interactive TUI** for browsing persons (Bubble Tea), with forms and confirmations for creates/deletes
-- **`linden doctor`** to diagnose auth, connectivity, and account configuration in one shot
+- `linden doctor` to diagnose auth, connectivity, and account configuration in one shot
+
+
 
 ## Requirements
 
 - macOS or Linux (amd64/arm64) for prebuilt binaries; Go 1.25+ if building from source
+
+
 
 ## Installation
 
@@ -56,6 +60,56 @@ Or run it directly during development without building:
 go run ./cmd/linden --help
 ```
 
+
+
+## Uninstallation
+
+Optionally clear credentials first (while the binary is still available), then remove the binary based on how you installed it.
+
+**Optional — remove config and credentials**
+
+```sh
+linden auth logout
+rm -rf ~/.config/linden
+rm -rf .linden       # only in directories where you used local account scope
+```
+
+`linden auth logout` clears OS keychain tokens. If the binary is already gone, delete any leftover Linden entries from Keychain Access (macOS) or your platform's secret store, then remove the config directories above.
+
+**Homebrew:**
+
+```sh
+brew uninstall linden
+# optional: remove the tap
+brew untap mylinden-tech/tap
+```
+
+**curl install script:**
+
+The script installs to `/usr/local/bin/linden`, or `~/.local/bin/linden` if that wasn't writable (or wherever `LINDEN_INSTALL_DIR` pointed).
+
+```sh
+# find which binary you're using
+which linden
+
+# remove it (pick the path which printed)
+rm -f /usr/local/bin/linden
+# or
+rm -f ~/.local/bin/linden
+# or, if you set a custom dir:
+# rm -f "$LINDEN_INSTALL_DIR/linden"
+```
+
+**From source (`go install` / `make install`):**
+
+```sh
+# typically one of:
+rm -f "$(go env GOPATH)/bin/linden"
+rm -f "$(go env GOBIN)/linden"   # if GOBIN is set
+# or if you only used ./bin/linden in the repo:
+rm -f ./bin/linden
+```
+
 ## Quick start
 
 ```sh
@@ -66,7 +120,11 @@ linden persons list            # browse persons in that account
 linden doctor                  # sanity-check auth, API, and account config
 ```
 
+
+
 ## Commands
+
+
 
 ### Authentication
 
@@ -76,6 +134,8 @@ linden auth status    # show whether you're authenticated
 linden auth logout    # remove stored credentials
 ```
 
+
+
 ### Accounts
 
 ```sh
@@ -83,6 +143,8 @@ linden accounts list                             # list accounts you have access
 linden accounts use <account-id>                  # set the active account (global scope)
 linden accounts use <account-id> --scope local     # scope to the current directory instead
 ```
+
+
 
 ### Persons
 
@@ -102,20 +164,24 @@ linden persons delete <id> --yes
 linden doctor   # checks auth, API connectivity, and active account configuration
 ```
 
+
+
 ## Output formats & flags
 
 Every command supports these global flags:
 
-| Flag | Description |
-| --- | --- |
-| `--json` | Output as JSON (envelope with `ok`/`data`/`summary`/`breadcrumbs`) |
-| `--md` | Output as Markdown |
-| `--styled` | Force ANSI styled output (default when stdout is a TTY) |
-| `--quiet` | Output data only, no envelope |
-| `--agent` | Agent mode — quiet JSON, suited for AI agents/scripts |
-| `--jq <expr>` | Filter JSON output with a [jq](https://jqlang.org/) expression |
-| `--account <id>` | Override the active account for this invocation only |
-| `--page`, `--size` | Pagination for list commands |
+
+| Flag               | Description                                                        |
+| ------------------ | ------------------------------------------------------------------ |
+| `--json`           | Output as JSON (envelope with `ok`/`data`/`summary`/`breadcrumbs`) |
+| `--md`             | Output as Markdown                                                 |
+| `--styled`         | Force ANSI styled output (default when stdout is a TTY)            |
+| `--quiet`          | Output data only, no envelope                                      |
+| `--agent`          | Agent mode — quiet JSON, suited for AI agents/scripts              |
+| `--jq <expr>`      | Filter JSON output with a [jq](https://jqlang.org/) expression     |
+| `--account <id>`   | Override the active account for this invocation only               |
+| `--page`, `--size` | Pagination for list commands                                       |
+
 
 By default, `linden` auto-detects: styled output in an interactive terminal, JSON envelope otherwise — so piping to another tool or an agent "just works" without extra flags.
 
@@ -129,20 +195,43 @@ Config is layered, lowest to highest precedence:
 4. Environment variables
 5. Command-line flags
 
+
+
 ### Environment variables
 
-| Variable | Purpose |
-| --- | --- |
-| `LINDEN_BASE_URL` | Override the API base URL |
-| `LINDEN_ACCOUNT` | Override the active account ID |
-| `LINDEN_TOKEN` | Bypass interactive login with a static token (useful in CI) |
-| `LINDEN_NO_TUI` | Disable interactive TUI prompts/browsers (force plain output) |
-| `LINDEN_NO_KEYRING` | Disable OS keyring usage for credential storage |
-| `XDG_CONFIG_HOME` | Override the global config directory location |
+
+| Variable            | Purpose                                                       |
+| ------------------- | ------------------------------------------------------------- |
+| `LINDEN_BASE_URL`   | Override the API base URL                                     |
+| `LINDEN_ACCOUNT`    | Override the active account ID                                |
+| `LINDEN_TOKEN`      | Bypass interactive login with a static token (useful in CI)   |
+| `LINDEN_NO_TUI`     | Disable interactive TUI prompts/browsers (force plain output) |
+| `LINDEN_NO_KEYRING` | Disable OS keyring usage for credential storage               |
+| `XDG_CONFIG_HOME`   | Override the global config directory location                 |
+
+
+
 
 ## AI agent integration
 
-`linden` is built for agent use as much as human use: pass `--agent` (or just pipe stdout) to get quiet, structured JSON with a `summary` field and `breadcrumbs` suggesting relevant follow-up commands — enough for an agent to navigate the CLI without needing `--help` on every step.
+`linden` supports two machine output modes:
+
+- `--agent` — quiet JSON of `data` only (best for scripting and extraction)
+- `--json` — full envelope with `ok`, `data`, `summary`, and `breadcrumbs` (best for chaining commands)
+
+Use `--jq '<expr>'` to filter JSON without piping to external `jq`. Use `--md` when presenting results to a human.
+
+### Agent skills
+
+Install [Agent Skills](https://agentskills.io) so coding agents know how to drive the CLI. Approve/install all three skills (`linden`, `linden-doctor`, `linden-persons`) in one shot:
+
+```sh
+npx skills add mylinden-tech/skills --skill '*' -y
+```
+
+Restart the agent session after install. Skills live in this repo under `[skills/](skills/)`; start with `[skills/linden/SKILL.md](skills/linden/SKILL.md)` (orchestrator), plus `linden-doctor` and `linden-persons` for setup and people management. See `[skills-publish/install.md](skills-publish/install.md)` for agent targeting, local staging, and the optional Claude Code plugin path.
+
+Run `linden doctor` first when diagnosing auth, API, or account configuration.
 
 ## Troubleshooting
 
@@ -156,6 +245,8 @@ make test    # run the test suite
 make tidy    # tidy go.mod/go.sum
 ```
 
+
+
 ### Project layout
 
 - `cmd/linden` — entrypoint (`main.go`)
@@ -167,6 +258,10 @@ make tidy    # tidy go.mod/go.sum
 - `internal/tui` / `internal/tui/persons` — interactive TUI (forms, confirmations, persons browser)
 - `internal/output` — response envelope and error formatting (JSON/Markdown/styled)
 - `internal/appctx` — request-scoped app context
+- `skills/` — Agent Skills for coding agents (`linden`, `linden-doctor`, `linden-persons`)
+- `skills-publish/` — templates and manifest for the public `mylinden-tech/skills` repo
+
+
 
 ### Tech stack
 
@@ -177,6 +272,8 @@ make tidy    # tidy go.mod/go.sum
 - **[gojq](https://github.com/itchyny/gojq)** — powers `--jq`
 - **[go-keyring](https://github.com/zalando/go-keyring)** — OS keychain credential storage
 - **Auth0** (OAuth 2.1 PKCE) — authentication against the Linden API
+
+
 
 ## License
 

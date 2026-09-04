@@ -145,11 +145,13 @@ func (c *Client) ListPersons(ctx context.Context, accountID string, p ListPerson
 		path = path + "?" + params.Encode()
 	}
 
-	var persons []Person
-	if err := c.get(ctx, path, &persons); err != nil {
+	var resp struct {
+		Items []Person `json:"items"`
+	}
+	if err := c.get(ctx, path, &resp); err != nil {
 		return nil, err
 	}
-	return persons, nil
+	return resp.Items, nil
 }
 
 // GetPerson fetches a single person by ID.

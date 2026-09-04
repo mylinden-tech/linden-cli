@@ -1,0 +1,11 @@
+{
+  "name": "linden-skills",
+  "version": "0.1.0",
+  "description": "Linden skills for coding agents — family accounts and persons via the linden CLI.",
+  "author": {
+    "name": "MyLinden"
+  },
+  "homepage": "https://github.com/mylinden-tech/skills",
+  "repository": "https://github.com/mylinden-tech/skills",
+  "license": "MIT"
+}
