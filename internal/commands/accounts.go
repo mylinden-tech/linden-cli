@@ -15,10 +15,15 @@ func NewAccountsCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "accounts",
 		Aliases: []string{"account"},
-		Short:   "Manage accounts",
-		Long:    "List authorized Linden accounts and set the active account.",
+		Short:   "View and select accounts",
+		Long:    "List, view, and select authorized Linden accounts, or inspect account statistics.",
 	}
-	cmd.AddCommand(newAccountsListCmd(), newAccountsUseCmd())
+	cmd.AddCommand(
+		newAccountsListCmd(),
+		newAccountsShowCmd(),
+		newAccountsStatsCmd(),
+		newAccountsUseCmd(),
+	)
 	return cmd
 }
 
@@ -49,6 +54,62 @@ func newAccountsListCmd() *cobra.Command {
 						Description: "Set active account",
 					},
 				),
+			)
+		},
+	}
+}
+
+func newAccountsShowCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "show [id]",
+		Short: "Show an account by ID",
+		Args:  cobra.MaximumNArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			app := appctx.FromContext(cmd.Context())
+			accountID := app.Config.AccountID
+			if len(args) == 1 {
+				accountID = args[0]
+			} else if err := app.RequireAccount(); err != nil {
+				return err
+			}
+
+			account, err := app.Client.GetAccount(cmd.Context(), accountID)
+			if err != nil {
+				return err
+			}
+			return app.OK(account,
+				output.WithSummary(account.Name),
+				output.WithBreadcrumbs(output.Breadcrumb{
+					Action:      "stats",
+					Cmd:         "linden accounts stats",
+					Description: "View active account statistics",
+				}),
+			)
+		},
+	}
+}
+
+func newAccountsStatsCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "stats",
+		Short: "Show statistics for the active account",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			app := appctx.FromContext(cmd.Context())
+			if err := app.RequireAccount(); err != nil {
+				return err
+			}
+			stats, err := app.Client.GetAccountStats(cmd.Context(), app.Config.AccountID)
+			if err != nil {
+				return err
+			}
+			return app.OK(stats,
+				output.WithSummary("Account statistics"),
+				output.WithBreadcrumbs(output.Breadcrumb{
+					Action:      "show",
+					Cmd:         "linden accounts show",
+					Description: "View active account details",
+				}),
 			)
 		},
 	}

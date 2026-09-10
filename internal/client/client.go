@@ -39,10 +39,20 @@ func New(baseURL string, tokens TokenProvider) *Client {
 
 // Account represents a Linden account.
 type Account struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	IsPrimary bool   `json:"is_primary"`
-	CreatedAt string `json:"created_at,omitempty"`
+	ID                    string  `json:"id"`
+	Name                  string  `json:"name"`
+	Description           *string `json:"description,omitempty"`
+	Logo                  *string `json:"logo,omitempty"`
+	Slug                  *int    `json:"slug,omitempty"`
+	CreatedByID           *string `json:"created_by_id,omitempty"`
+	QuoreProjectID        *string `json:"quore_project_id,omitempty"`
+	IsPrimary             bool    `json:"is_primary"`
+	OnboardingCompletedAt *string `json:"onboarding_completed_at,omitempty"`
+	Onboard               bool    `json:"onboard"`
+	CreatedAt             string  `json:"created_at,omitempty"`
+	UpdatedAt             string  `json:"updated_at,omitempty"`
+	CreatedBy             any     `json:"created_by,omitempty"`
+	Memberships           any     `json:"memberships,omitempty"`
 }
 
 // Person represents a person within an account.

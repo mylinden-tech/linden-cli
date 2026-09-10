@@ -33,3 +33,52 @@ func TestRedactForAgentRemovesKeysFromSlice(t *testing.T) {
 		}
 	}
 }
+
+func TestRedactForAgentFailClosedOnMarshalError(t *testing.T) {
+	t.Parallel()
+
+	ch := make(chan int)
+	out := output.RedactForAgent(ch, "secret")
+	m, ok := out.(map[string]any)
+	if !ok {
+		t.Fatalf("expected map[string]any, got %T", out)
+	}
+	if len(m) != 0 {
+		t.Fatalf("expected empty map on marshal error, got %v", m)
+	}
+}
+
+func TestRedactForAgentFailClosedOnFuncMarshalError(t *testing.T) {
+	t.Parallel()
+
+	out := output.RedactForAgent(func() {}, "secret")
+	m, ok := out.(map[string]any)
+	if !ok {
+		t.Fatalf("expected map[string]any, got %T", out)
+	}
+	if len(m) != 0 {
+		t.Fatalf("expected empty map on marshal error, got %v", m)
+	}
+}
+
+func TestRedactForAgentNoFieldsReturnsOriginal(t *testing.T) {
+	t.Parallel()
+
+	in := map[string]any{"vin": "SECRET"}
+	out := output.RedactForAgent(in)
+	if out == nil {
+		t.Fatal("expected original data when no fields")
+	}
+	m, ok := out.(map[string]any)
+	if !ok || m["vin"] != "SECRET" {
+		t.Fatalf("expected unchanged data when no fields, got %v", out)
+	}
+}
+
+func TestRedactForAgentNilDataReturnsNil(t *testing.T) {
+	t.Parallel()
+
+	if out := output.RedactForAgent(nil, "vin"); out != nil {
+		t.Fatalf("expected nil, got %v", out)
+	}
+}

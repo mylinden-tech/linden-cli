@@ -1,6 +1,6 @@
 # Install Linden Agent Skills
 
-Install Agent Skills so your coding agent can manage Linden family accounts, persons, pets, reminders, and todos via the `linden` CLI.
+Install Agent Skills so your coding agent can inspect and manage Linden family account data via the `linden` CLI.
 
 **Done when:** `linden --version` succeeds, `linden auth status` shows you are authenticated (or you complete login), and the `linden` skill is installed in your agent.
 
@@ -32,7 +32,7 @@ linden auth status
 
 ## Step 3: Install skills
 
-One package ships six skills: `linden` (hub), `linden-doctor`, and domain skills `linden-persons`, `linden-pets`, `linden-reminders`, and `linden-todos`. Domain skills are hub-routed (`disable-model-invocation: true`) — agents load them via the `linden` routing table, not ambient auto-invocation. Install them all in a single command — do not pick them one-by-one in the prompt:
+One package ships seventeen skills: `linden` (hub), `linden-doctor`, and domain skills `linden-account-settings`, `linden-account-shares`, `linden-contacts`, `linden-invitations`, `linden-memberships`, `linden-persons`, `linden-pets`, `linden-reminders`, `linden-todos`, `linden-vehicles`, `linden-real-estates`, `linden-online-accounts`, `linden-insurances`, `linden-wills`, and `linden-share-links`. All domain skills are hub-routed (`disable-model-invocation: true`)—agents load them via the `linden` routing table, not ambient auto-invocation. Install them all in a single command—do not pick them one-by-one in the prompt:
 
 ```sh
 npx skills add mylinden-tech/skills --skill '*' -y
@@ -85,7 +85,7 @@ linden accounts list --json
 - `linden doctor --agent` prints JSON with `"ok": true` and checks for `auth`, `api`, and `account` all `"ok": true`.
 - `linden accounts list --json` prints an envelope with `"ok": true`, a `data` array of accounts, and a `breadcrumbs` entry suggesting `linden accounts use <id>`.
 
-In the agent, ask about Linden persons, pets, reminders, or todos — or run a doctor check. The agent should route through the `linden` hub, load the matching domain skill, and use `linden` commands with `--agent` or `--json`. It should not invent unsupported resource commands (vehicles, properties, documents, passports, insurance).
+In the agent, ask about any supported Linden domain—or run a doctor check. The agent should route through the `linden` hub, load the matching domain skill, and use `linden` commands with `--agent` or `--json`. It should not invent unsupported resource commands (documents, passports, SSNs, files, driver licenses, birth certificates, body memorial wishes, legacy messages, or contact-import).
 
 ## Practical rule for agents
 
@@ -104,10 +104,21 @@ git clone https://github.com/mylinden-tech/skills ~/.linden-skills
 mkdir -p ~/.cursor/skills
 ln -sfn ~/.linden-skills/skills/linden ~/.cursor/skills/linden
 ln -sfn ~/.linden-skills/skills/linden-doctor ~/.cursor/skills/linden-doctor
+ln -sfn ~/.linden-skills/skills/linden-account-settings ~/.cursor/skills/linden-account-settings
+ln -sfn ~/.linden-skills/skills/linden-account-shares ~/.cursor/skills/linden-account-shares
+ln -sfn ~/.linden-skills/skills/linden-contacts ~/.cursor/skills/linden-contacts
+ln -sfn ~/.linden-skills/skills/linden-invitations ~/.cursor/skills/linden-invitations
+ln -sfn ~/.linden-skills/skills/linden-memberships ~/.cursor/skills/linden-memberships
 ln -sfn ~/.linden-skills/skills/linden-persons ~/.cursor/skills/linden-persons
 ln -sfn ~/.linden-skills/skills/linden-pets ~/.cursor/skills/linden-pets
 ln -sfn ~/.linden-skills/skills/linden-reminders ~/.cursor/skills/linden-reminders
 ln -sfn ~/.linden-skills/skills/linden-todos ~/.cursor/skills/linden-todos
+ln -sfn ~/.linden-skills/skills/linden-vehicles ~/.cursor/skills/linden-vehicles
+ln -sfn ~/.linden-skills/skills/linden-real-estates ~/.cursor/skills/linden-real-estates
+ln -sfn ~/.linden-skills/skills/linden-online-accounts ~/.cursor/skills/linden-online-accounts
+ln -sfn ~/.linden-skills/skills/linden-insurances ~/.cursor/skills/linden-insurances
+ln -sfn ~/.linden-skills/skills/linden-wills ~/.cursor/skills/linden-wills
+ln -sfn ~/.linden-skills/skills/linden-share-links ~/.cursor/skills/linden-share-links
 ```
 
 Update with `cd ~/.linden-skills && git pull`. Symlinks pick up changes immediately.

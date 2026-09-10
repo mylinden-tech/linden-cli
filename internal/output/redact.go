@@ -15,11 +15,11 @@ func RedactForAgent(data any, fields ...string) any {
 	}
 	b, err := json.Marshal(data)
 	if err != nil {
-		return data
+		return map[string]any{}
 	}
 	var v any
 	if err := json.Unmarshal(b, &v); err != nil {
-		return data
+		return map[string]any{}
 	}
 	omit := map[string]struct{}{}
 	for _, f := range fields {

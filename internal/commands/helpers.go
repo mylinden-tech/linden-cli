@@ -64,3 +64,31 @@ func strPtr(s string) *string {
 
 // boolPtr returns a pointer to b.
 func boolPtr(b bool) *bool { return &b }
+
+func addPageSizeFlags(cmd *cobra.Command, page, size *int) {
+	cmd.Flags().IntVar(page, "page", 0, "Page number")
+	cmd.Flags().IntVar(size, "size", 0, "Page size")
+}
+
+func addShareResourceFlags(cmd *cobra.Command, resourceType, resourceID *string) {
+	cmd.Flags().StringVar(resourceType, "resource-type", "accounts", "Resource type")
+	cmd.Flags().StringVar(resourceID, "resource-id", "", "Resource ID (defaults to active account)")
+}
+
+func resolveShareResourceID(app *appctx.App, resourceID string) (string, error) {
+	if resourceID != "" {
+		return resourceID, nil
+	}
+	if err := app.RequireAccount(); err != nil {
+		return "", err
+	}
+	return app.Config.AccountID, nil
+}
+
+// okMaybeRedacted writes a success response, redacting fields when agent mode is on.
+func okMaybeRedacted(app *appctx.App, data any, fields []string, opts ...output.ResponseOption) error {
+	if app.Flags.Agent && len(fields) > 0 {
+		data = output.RedactForAgent(data, fields...)
+	}
+	return app.OK(data, opts...)
+}
