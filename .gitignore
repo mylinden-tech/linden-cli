@@ -43,3 +43,7 @@ publish-staging/
 # Local Cursor skill symlinks used for dogfooding (canonical skills live in skills/).
 # Shared Cursor rules under .cursor/rules/ are tracked.
 .cursor/*
+
+# Local superpowers documentation used for dogfooding (canonical superpowers live in superpowers/).
+docs/superpowers/*
+docs/future-features/*

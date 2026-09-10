@@ -1,6 +1,6 @@
 # Install Linden Agent Skills
 
-Install Agent Skills so your coding agent can manage Linden family accounts and persons via the `linden` CLI.
+Install Agent Skills so your coding agent can manage Linden family accounts, persons, pets, reminders, and todos via the `linden` CLI.
 
 **Done when:** `linden --version` succeeds, `linden auth status` shows you are authenticated (or you complete login), and the `linden` skill is installed in your agent.
 
@@ -32,7 +32,7 @@ linden auth status
 
 ## Step 3: Install skills
 
-One package ships three skills (`linden`, `linden-doctor`, `linden-persons`). Install them all in a single command — do not pick them one-by-one in the prompt:
+One package ships six skills: `linden` (hub), `linden-doctor`, and domain skills `linden-persons`, `linden-pets`, `linden-reminders`, and `linden-todos`. Domain skills are hub-routed (`disable-model-invocation: true`) — agents load them via the `linden` routing table, not ambient auto-invocation. Install them all in a single command — do not pick them one-by-one in the prompt:
 
 ```sh
 npx skills add mylinden-tech/skills --skill '*' -y
@@ -65,7 +65,7 @@ Restart your agent session to pick up the new skills.
 
 ### Claude Code plugin (optional)
 
-The same package includes `.claude-plugin/plugin.json` (`linden-skills`). In Claude Code you can install that **one plugin** instead of using `npx`; it loads all three skills together:
+The same package includes `.claude-plugin/plugin.json` (`linden-skills`). In Claude Code you can install that **one plugin** instead of using `npx`; it loads all skills together:
 
 ```
 /plugin install /absolute/path/to/.publish-staging
@@ -85,7 +85,7 @@ linden accounts list --json
 - `linden doctor --agent` prints JSON with `"ok": true` and checks for `auth`, `api`, and `account` all `"ok": true`.
 - `linden accounts list --json` prints an envelope with `"ok": true`, a `data` array of accounts, and a `breadcrumbs` entry suggesting `linden accounts use <id>`.
 
-In the agent, ask about Linden persons or run a doctor check. The agent should use `linden` commands with `--agent` or `--json`, not invent unsupported resource commands.
+In the agent, ask about Linden persons, pets, reminders, or todos — or run a doctor check. The agent should route through the `linden` hub, load the matching domain skill, and use `linden` commands with `--agent` or `--json`. It should not invent unsupported resource commands (vehicles, properties, documents, passports, insurance).
 
 ## Practical rule for agents
 
@@ -105,6 +105,9 @@ mkdir -p ~/.cursor/skills
 ln -sfn ~/.linden-skills/skills/linden ~/.cursor/skills/linden
 ln -sfn ~/.linden-skills/skills/linden-doctor ~/.cursor/skills/linden-doctor
 ln -sfn ~/.linden-skills/skills/linden-persons ~/.cursor/skills/linden-persons
+ln -sfn ~/.linden-skills/skills/linden-pets ~/.cursor/skills/linden-pets
+ln -sfn ~/.linden-skills/skills/linden-reminders ~/.cursor/skills/linden-reminders
+ln -sfn ~/.linden-skills/skills/linden-todos ~/.cursor/skills/linden-todos
 ```
 
 Update with `cd ~/.linden-skills && git pull`. Symlinks pick up changes immediately.

@@ -21,9 +21,9 @@ type TokenProvider interface {
 
 // Client wraps the Linden REST API.
 type Client struct {
-	baseURL  string
-	tokens   TokenProvider
-	http     *http.Client
+	baseURL string
+	tokens  TokenProvider
+	http    *http.Client
 }
 
 // New creates a new API client.
@@ -139,7 +139,7 @@ func (c *Client) ListPersons(ctx context.Context, accountID string, p ListPerson
 		params.Set("page", fmt.Sprintf("%d", p.Page))
 	}
 	if p.Size > 0 {
-		params.Set("page_size", fmt.Sprintf("%d", p.Size))
+		params.Set("size", fmt.Sprintf("%d", p.Size))
 	}
 	if len(params) > 0 {
 		path = path + "?" + params.Encode()

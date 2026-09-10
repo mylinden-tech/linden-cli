@@ -1,5 +1,6 @@
 {
   "name": "linden-skills",
+  "displayName": "My Linden",
   "version": "0.1.0",
   "description": "Linden skills for coding agents — family accounts and persons via the linden CLI.",
   "author": {

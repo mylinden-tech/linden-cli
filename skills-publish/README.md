@@ -1,6 +1,6 @@
 # Agent Skills for Linden
 
-[Agent skills](https://agentskills.io) for [Linden](https://www.mylinden.family/) — manage family accounts and persons from coding agents via the `linden` CLI.
+[Agent skills](https://agentskills.io) for [Linden](https://www.mylinden.family/) — manage family accounts, persons, pets, reminders, and todos from coding agents via the `linden` CLI.
 
 ```
 npx skills add mylinden-tech/skills --skill '*' -y
@@ -12,9 +12,14 @@ npx skills add mylinden-tech/skills --skill '*' -y
 
 | Skill | Description |
 |-------|-------------|
-| [linden](skills/linden/SKILL.md) | Orchestrator — invariants, auth, accounts, routing to domain skills |
+| [linden](skills/linden/SKILL.md) | Hub — invariants, auth, accounts, routing to domain skills |
 | [linden-doctor](skills/linden-doctor/SKILL.md) | Diagnose CLI, auth, API, and active account |
 | [linden-persons](skills/linden-persons/SKILL.md) | List, show, create, update, and delete persons |
+| [linden-pets](skills/linden-pets/SKILL.md) | List, show, create, update, and delete pets |
+| [linden-reminders](skills/linden-reminders/SKILL.md) | List, show, create, update, complete, and delete reminders |
+| [linden-todos](skills/linden-todos/SKILL.md) | List, show, create, update, and delete todos and todo lists |
+
+Domain skills (`linden-persons`, `linden-pets`, `linden-reminders`, `linden-todos`) set `disable-model-invocation: true`. Agents discover them through the `linden` hub routing table — not via ambient auto-invocation. `--skill '*'` still installs every skill in the package.
 
 ## Requires
 
@@ -37,7 +42,8 @@ After install and `linden auth login`, ask your agent:
 2. "List my Linden accounts."
 3. "List people in my Linden account."
 4. "Show details for [a person from the list]."
-5. "List vehicles in Linden." — should say the CLI has no vehicles command (do not invent one).
+5. "List pets in my Linden account."
+6. "List vehicles in Linden." — should say the CLI has no vehicles command (do not invent one).
 
 Or run yourself:
 
@@ -45,6 +51,7 @@ Or run yourself:
 linden doctor --agent
 linden accounts list --json
 linden persons list --json
+linden pets list --json
 ```
 
 ## About

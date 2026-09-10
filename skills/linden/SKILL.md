@@ -4,6 +4,9 @@ description: |
   This skill should be used when the user mentions Linden, mylinden, the linden CLI,
   a Linden family account, or asks to inspect or change family data through Linden.
   Pair with linden-persons for people, contacts, or family members.
+  Pair with linden-pets for pets.
+  Pair with linden-reminders for reminders.
+  Pair with linden-todos for todos and todo lists.
   Pair with linden-doctor for login, setup, doctor, or a failing CLI.
 ---
 
@@ -30,7 +33,10 @@ See [references/envelope.md](references/envelope.md) for output modes and [refer
 - Auth status / login / logout → `linden auth status --agent`, `linden auth login`, or `linden auth logout`
 - List or switch accounts → `linden accounts list --json` then `linden accounts use <id>`
 - People, contacts, family members → load `linden-persons`
-- Vehicles, properties, documents, insurance, reminders → not in the CLI; say so
+- Pets → load `linden-pets`
+- Reminders → load `linden-reminders`
+- Todos and todo lists → load `linden-todos`
+- Vehicles, properties, documents, passports, insurance → not in the CLI; say so
 
 ## Cheat sheet
 

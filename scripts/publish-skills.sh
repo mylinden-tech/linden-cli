@@ -9,9 +9,10 @@ fi
 root="$(cd "$(dirname "$0")/.." && pwd)"
 rm -rf "$dest/skills"
 mkdir -p "$dest/skills"
-cp -R "$root/skills/linden" "$dest/skills/linden"
-cp -R "$root/skills/linden-doctor" "$dest/skills/linden-doctor"
-cp -R "$root/skills/linden-persons" "$dest/skills/linden-persons"
+for dir in "$root"/skills/linden*; do
+  name="$(basename "$dir")"
+  cp -R "$dir" "$dest/skills/$name"
+done
 rm -f "$dest/skills/linden"/*.go "$dest/skills/"*.go 2>/dev/null || true
 find "$dest/skills" -name '*_test.go' -delete
 cp "$root/skills-publish/README.md" "$dest/README.md"

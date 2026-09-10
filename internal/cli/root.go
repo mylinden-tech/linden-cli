@@ -97,6 +97,9 @@ func NewRootCmd(info BuildInfo) *cobra.Command {
 		commands.NewAuthCmd(),
 		commands.NewAccountsCmd(),
 		commands.NewPersonsCmd(),
+		commands.NewPetsCmd(),
+		commands.NewRemindersCmd(),
+		commands.NewTodosCmd(),
 		commands.NewDoctorCmd(),
 	)
 

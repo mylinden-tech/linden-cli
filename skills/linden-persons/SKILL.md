@@ -4,6 +4,8 @@ description: |
   This skill should be used when the user asks to list, show, create, update, or delete
   Linden people, persons, contacts, or family members, or mentions person fields such as
   name, email, phone, birthday, address, or relationship type.
+  Prefer loading via the linden hub skill routing table.
+disable-model-invocation: true
 ---
 
 # Linden Persons

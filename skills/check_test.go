@@ -1,3 +1,11 @@
+// Package skills_test is a contract suite for Agent Skills under skills/.
+//
+// It checks that required skill trees and reference docs exist, that each
+// SKILL.md has valid frontmatter, and that every documented `linden …`
+// command is a real CLI path (and that known non-commands like vehicles or
+// curl are absent). Run with `make test-skills` or `go test ./skills`.
+// These tests stay in the monorepo; publish-skills.sh strips *_test.go from
+// the public skills package.
 package skills_test
 
 import (
@@ -9,28 +17,52 @@ import (
 	"testing"
 )
 
-var requiredSkills = []string{"linden", "linden-doctor", "linden-persons"}
+var requiredSkills = []string{
+	"linden", "linden-doctor", "linden-persons", "linden-pets", "linden-reminders",
+	"linden-todos",
+}
+
+var hubSkills = map[string]bool{"linden": true, "linden-doctor": true}
 
 var requiredRefs = []string{
 	"linden/references/envelope.md",
 	"linden/references/auth-and-accounts.md",
 	"linden-persons/references/person-fields.md",
 	"linden-persons/references/examples.md",
+	"linden-pets/references/pet-fields.md",
 }
 
 // First two tokens after `linden` (command group + subcommand), or a single token for doctor.
 var allowed = map[string]bool{
-	"doctor":         true,
-	"auth login":     true,
-	"auth status":    true,
-	"auth logout":    true,
-	"accounts list":  true,
-	"accounts use":   true,
-	"persons list":   true,
-	"persons show":   true,
-	"persons create": true,
-	"persons update": true,
-	"persons delete": true,
+	"doctor":             true,
+	"auth login":         true,
+	"auth status":        true,
+	"auth logout":        true,
+	"accounts list":      true,
+	"accounts use":       true,
+	"persons list":       true,
+	"persons show":       true,
+	"persons create":     true,
+	"persons update":     true,
+	"persons delete":     true,
+	"pets list":          true,
+	"pets show":          true,
+	"pets create":        true,
+	"pets update":        true,
+	"pets delete":        true,
+	"reminders list":     true,
+	"reminders show":     true,
+	"reminders create":   true,
+	"reminders update":   true,
+	"reminders complete": true,
+	"reminders delete":   true,
+	"todos list":         true,
+	"todos lists":        true,
+	"todos create-list":  true,
+	"todos show":         true,
+	"todos create":       true,
+	"todos update":       true,
+	"todos delete":       true,
 }
 
 var forbidden = []string{
@@ -53,6 +85,29 @@ func stripFrontmatter(body string) string {
 		return body
 	}
 	return rest[end+4:]
+}
+
+func TestDomainSkillsDisableModelInvocation(t *testing.T) {
+	entries, err := os.ReadDir(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, e := range entries {
+		if !e.IsDir() || !strings.HasPrefix(e.Name(), "linden") {
+			continue
+		}
+		if hubSkills[e.Name()] {
+			continue
+		}
+		b, err := os.ReadFile(filepath.Join(e.Name(), "SKILL.md"))
+		if err != nil {
+			t.Errorf("%s: %v", e.Name(), err)
+			continue
+		}
+		if !strings.Contains(string(b), "disable-model-invocation: true") {
+			t.Errorf("%s: domain skill must set disable-model-invocation: true", e.Name())
+		}
+	}
 }
 
 func TestSkillLayout(t *testing.T) {
