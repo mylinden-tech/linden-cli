@@ -1,8 +1,8 @@
 {
   "name": "linden-skills",
   "displayName": "My Linden",
-  "version": "0.1.0",
-  "description": "Linden skills for coding agents — family accounts and persons via the linden CLI.",
+  "version": "0.2.0",
+  "description": "Linden skills for coding agents — manage family accounts, people, pets, reminders, todos, contacts, assets, insurance, and more via the linden CLI. Domain skills load through the linden hub.",
   "author": {
     "name": "MyLinden"
   },
