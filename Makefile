@@ -12,5 +12,8 @@ install:
 test:
 	go test ./...
 
+test-skills:
+	go test ./skills -count=1
+
 tidy:
 	go mod tidy

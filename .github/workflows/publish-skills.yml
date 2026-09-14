@@ -1,0 +1,66 @@
+name: Publish skills
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "skills/**"
+      - "skills-publish/**"
+      - "scripts/publish-skills.sh"
+      - ".github/workflows/publish-skills.yml"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: publish-skills
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Sync to mylinden-tech/skills
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out linden-cli
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+
+      - name: Test skills package
+        run: go test ./skills -count=1
+
+      - name: Check out mylinden-tech/skills
+        uses: actions/checkout@v4
+        with:
+          repository: mylinden-tech/skills
+          token: ${{ secrets.SKILLS_REPO_TOKEN }}
+          path: skills-repo
+          persist-credentials: true
+
+      - name: Publish skill trees
+        run: ./scripts/publish-skills.sh "${GITHUB_WORKSPACE}/skills-repo"
+
+      - name: Commit and push if changed
+        working-directory: skills-repo
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+          SOURCE_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No skill changes to publish."
+            exit 0
+          fi
+          git commit -m "Sync skills from ${SOURCE_REPO}@${SOURCE_SHA}" \
+            -m "Autopublished by linden-cli publish-skills workflow."
+          git push

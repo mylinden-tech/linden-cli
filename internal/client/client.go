@@ -21,9 +21,9 @@ type TokenProvider interface {
 
 // Client wraps the Linden REST API.
 type Client struct {
-	baseURL  string
-	tokens   TokenProvider
-	http     *http.Client
+	baseURL string
+	tokens  TokenProvider
+	http    *http.Client
 }
 
 // New creates a new API client.
@@ -39,10 +39,20 @@ func New(baseURL string, tokens TokenProvider) *Client {
 
 // Account represents a Linden account.
 type Account struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	IsPrimary bool   `json:"is_primary"`
-	CreatedAt string `json:"created_at,omitempty"`
+	ID                    string  `json:"id"`
+	Name                  string  `json:"name"`
+	Description           *string `json:"description,omitempty"`
+	Logo                  *string `json:"logo,omitempty"`
+	Slug                  *int    `json:"slug,omitempty"`
+	CreatedByID           *string `json:"created_by_id,omitempty"`
+	QuoreProjectID        *string `json:"quore_project_id,omitempty"`
+	IsPrimary             bool    `json:"is_primary"`
+	OnboardingCompletedAt *string `json:"onboarding_completed_at,omitempty"`
+	Onboard               bool    `json:"onboard"`
+	CreatedAt             string  `json:"created_at,omitempty"`
+	UpdatedAt             string  `json:"updated_at,omitempty"`
+	CreatedBy             any     `json:"created_by,omitempty"`
+	Memberships           any     `json:"memberships,omitempty"`
 }
 
 // Person represents a person within an account.
@@ -139,17 +149,19 @@ func (c *Client) ListPersons(ctx context.Context, accountID string, p ListPerson
 		params.Set("page", fmt.Sprintf("%d", p.Page))
 	}
 	if p.Size > 0 {
-		params.Set("page_size", fmt.Sprintf("%d", p.Size))
+		params.Set("size", fmt.Sprintf("%d", p.Size))
 	}
 	if len(params) > 0 {
 		path = path + "?" + params.Encode()
 	}
 
-	var persons []Person
-	if err := c.get(ctx, path, &persons); err != nil {
+	var resp struct {
+		Items []Person `json:"items"`
+	}
+	if err := c.get(ctx, path, &resp); err != nil {
 		return nil, err
 	}
-	return persons, nil
+	return resp.Items, nil
 }
 
 // GetPerson fetches a single person by ID.
