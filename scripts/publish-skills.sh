@@ -20,6 +20,3 @@ cp "$root/skills-publish/install.md" "$dest/install.md"
 cp "$root/skills-publish/LICENSE" "$dest/LICENSE"
 mkdir -p "$dest/.claude-plugin"
 cp "$root/skills-publish/.claude-plugin/plugin.json" "$dest/.claude-plugin/plugin.json"
-if [[ -f "$root/LICENSE" ]]; then
-  cp "$root/LICENSE" "$dest/LICENSE"
-fi

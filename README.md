@@ -229,7 +229,7 @@ Install [Agent Skills](https://agentskills.io) so coding agents know how to driv
 npx skills add mylinden-tech/skills --skill '*' -y
 ```
 
-Restart the agent session after install. Skills live in this repo under `[skills/](skills/)`; start with `[skills/linden/SKILL.md](skills/linden/SKILL.md)` (orchestrator), plus `linden-doctor` and `linden-persons` for setup and people management. See `[skills-publish/install.md](skills-publish/install.md)` for agent targeting, local staging, and the optional Claude Code plugin path.
+Restart the agent session after install. Skills live in this repo under [skills/](skills/); start with [skills/linden/SKILL.md](skills/linden/SKILL.md) (orchestrator), plus `linden-doctor` and `linden-persons` for setup and people management. See [skills-publish/install.md](skills-publish/install.md) for agent targeting, local staging, and the optional Claude Code plugin path.
 
 Run `linden doctor` first when diagnosing auth, API, or account configuration.
 

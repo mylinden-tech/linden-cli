@@ -234,6 +234,9 @@ func TestReferenceLinksExist(t *testing.T) {
 				}
 			}
 		}
+		if scanErr := sc.Err(); scanErr != nil {
+			t.Error(scanErr)
+		}
 		return nil
 	})
 	if err != nil {
