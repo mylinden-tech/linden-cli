@@ -10,6 +10,17 @@ import (
 	"github.com/mylinden-tech/linden-cli/internal/output"
 )
 
+var todoStatuses = []string{"open", "completed"}
+
+func validTodoStatus(status string) bool {
+	for _, allowed := range todoStatuses {
+		if status == allowed {
+			return true
+		}
+	}
+	return false
+}
+
 // NewTodosCmd creates the todos command group.
 func NewTodosCmd() *cobra.Command {
 	cmd := &cobra.Command{
@@ -129,7 +140,10 @@ func newTodosListsCmd() *cobra.Command {
 func newTodosCreateListCmd() *cobra.Command {
 	var title, resourceType, resourceID string
 	cmd := &cobra.Command{
-		Use:   "create-list",
+		Use: "create-list",
+		Annotations: map[string]string{
+			"agent_notes": "--resource-type and --resource-id must be supplied together",
+		},
 		Short: "Create a todo list in the active account",
 		Long: `Create a todo list. Resource type and resource ID must be supplied together.
 
@@ -237,6 +251,7 @@ func newTodosCreateCmd() *cobra.Command {
 	cmd.Flags().StringVar(&title, "title", "", "Todo title (required)")
 	cmd.Flags().StringVar(&description, "description", "", "Description")
 	cmd.Flags().StringVar(&dueDate, "due-date", "", "Due date (YYYY-MM-DD)")
+	annotateFormat(cmd, "due-date", "YYYY-MM-DD")
 	cmd.Flags().StringVar(&assignedToID, "assigned-to", "", "Assigned user UUID")
 	_ = cmd.MarkFlagRequired("list")
 	_ = cmd.MarkFlagRequired("title")
@@ -273,6 +288,9 @@ func newTodosUpdateCmd() *cobra.Command {
 				changed = true
 			}
 			if cmd.Flags().Changed("status") {
+				if !validTodoStatus(status) {
+					return output.ErrUsage("status must be open or completed")
+				}
 				req.Status = &status
 				changed = true
 			}
@@ -298,8 +316,10 @@ func newTodosUpdateCmd() *cobra.Command {
 	cmd.Flags().StringVar(&title, "title", "", "Todo title")
 	cmd.Flags().StringVar(&description, "description", "", "Description")
 	cmd.Flags().StringVar(&dueDate, "due-date", "", "Due date (YYYY-MM-DD)")
+	annotateFormat(cmd, "due-date", "YYYY-MM-DD")
 	cmd.Flags().StringVar(&assignedToID, "assigned-to", "", "Assigned user UUID")
 	cmd.Flags().StringVar(&status, "status", "", "Status (open or completed)")
+	annotateEnum(cmd, "status", todoStatuses)
 	return cmd
 }
 

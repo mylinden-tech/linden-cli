@@ -8,29 +8,32 @@ npx skills add mylinden-tech/skills --skill '*' -y
 
 `--skill '*'` installs all skills in the package at once (`-y` skips prompts). See [install.md](install.md) for full setup including CLI authentication and the optional Claude Code plugin.
 
-## Available skills
+## Available skill
 
-| Skill | Description |
-|-------|-------------|
-| [linden](skills/linden/SKILL.md) | Hub — invariants, auth, accounts, routing to domain skills |
-| [linden-doctor](skills/linden-doctor/SKILL.md) | Diagnose CLI, auth, API, and active account |
-| [linden-account-settings](skills/linden-account-settings/SKILL.md) | View account details, statistics, and current user settings |
-| [linden-account-shares](skills/linden-account-shares/SKILL.md) | List and show account resource shares |
-| [linden-contacts](skills/linden-contacts/SKILL.md) | List, show, and search contacts and contact types |
-| [linden-invitations](skills/linden-invitations/SKILL.md) | List and show account invitations |
-| [linden-memberships](skills/linden-memberships/SKILL.md) | List and show memberships and available roles |
-| [linden-persons](skills/linden-persons/SKILL.md) | List, show, create, update, and delete persons |
-| [linden-pets](skills/linden-pets/SKILL.md) | List, show, create, update, and delete pets |
-| [linden-reminders](skills/linden-reminders/SKILL.md) | List, show, create, update, complete, and delete reminders |
-| [linden-todos](skills/linden-todos/SKILL.md) | List, show, create, update, and delete todos and todo lists |
-| [linden-vehicles](skills/linden-vehicles/SKILL.md) | List and show vehicles |
-| [linden-real-estates](skills/linden-real-estates/SKILL.md) | List and show real estate |
-| [linden-online-accounts](skills/linden-online-accounts/SKILL.md) | List and show online accounts |
-| [linden-insurances](skills/linden-insurances/SKILL.md) | List and show insurance policies, providers, and expiring coverage |
-| [linden-wills](skills/linden-wills/SKILL.md) | List and show will metadata |
-| [linden-share-links](skills/linden-share-links/SKILL.md) | List and show resource-specific share links |
+One skill, `linden`. Domain behavior lives in references. `/linden reminders` reads that reference. There is no `/linden-reminders` command.
 
-All domain skills set `disable-model-invocation: true`. Agents discover domain skills through the `linden` hub routing table—not via ambient auto-invocation. `--skill '*'` still installs every skill in the package.
+| Reference | Use when the user talks about |
+|---|---|
+| [SKILL.md](skills/linden/SKILL.md) | Routing, decision tree, and `/linden [domain]` |
+| [doctor](skills/linden/references/doctor.md) | Login, setup, or a CLI that is not working |
+| [auth-and-accounts](skills/linden/references/auth-and-accounts.md) | Login, logout, or switching accounts |
+| [account-settings](skills/linden/references/account-settings.md) | Account details, statistics, and user settings |
+| [account-shares](skills/linden/references/account-shares.md) | Who a resource is shared with |
+| [share-links](skills/linden/references/share-links.md) | Public or resource share links |
+| [contacts](skills/linden/references/contacts.md) | Contacts, including a family doctor or lawyer |
+| [invitations](skills/linden/references/invitations.md) | Pending invitations |
+| [memberships](skills/linden/references/memberships.md) | Members and roles |
+| [persons](skills/linden/references/persons.md) | People and family members |
+| [pets](skills/linden/references/pets.md) | Pets |
+| [reminders](skills/linden/references/reminders.md) | Reminders |
+| [todos](skills/linden/references/todos.md) | Todos and todo lists |
+| [vehicles](skills/linden/references/vehicles.md) | Vehicles |
+| [real-estates](skills/linden/references/real-estates.md) | Homes and property |
+| [online-accounts](skills/linden/references/online-accounts.md) | Website logins and subscriptions |
+| [insurances](skills/linden/references/insurances.md) | Policies, providers, and expiring coverage |
+| [wills](skills/linden/references/wills.md) | Will metadata |
+
+`--skill '*'` installs the one skill in the package.
 
 ## Requires
 

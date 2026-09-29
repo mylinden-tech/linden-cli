@@ -1,48 +1,26 @@
 # Auth and accounts
 
-## Authentication
+The hub decision tree already applies. This file covers login and choosing an account.
 
-**`linden auth login`** opens a browser for Auth0 PKCE authentication (local loopback callback on port 3009). Start the command and wait for the human to complete the browser flow. Do not scrape the callback URL or read stored tokens.
+## Commands
 
-**`linden auth status --agent`** returns data such as:
-
-```json
-{ "authenticated": true, "expires_at": "...", "token_type": "Bearer" }
-```
-
-When not authenticated:
-
-```json
-{ "authenticated": false }
-```
-
-**`linden auth logout`** removes stored credentials.
-
-## Accounts
-
-**`linden accounts list --json`** lists accounts the authenticated user can access. Use `--json` to read breadcrumbs suggesting `linden accounts use <id>`.
-
-**`linden accounts use <id>`** sets the active account. Default scope is global (`~/.config/linden/config.json`). Pass **`--scope local`** to write `.linden/config.json` in the current directory instead.
-
-One-shot override without persisting: **`--account <id>`** on any command, or set **`LINDEN_ACCOUNT`** in the environment.
-
-All persons commands require an active account. Without one, the CLI returns a usage error with a hint to list and select an account.
-
-## Configuration
-
-Precedence (lowest to highest): built-in defaults → global config → local config → environment variables → CLI flags.
-
-| Location | Path |
+| Task | Command |
 |---|---|
-| Global config | `~/.config/linden/config.json` (or `$XDG_CONFIG_HOME/linden/config.json`) |
-| Local config | `.linden/config.json` in the current working directory |
+| Log in | `linden auth login` |
+| Auth status | `linden auth status --agent` |
+| Log out | `linden auth logout` |
+| List accounts | `linden accounts list --json` |
+| Use account | `linden accounts use <uuid>` |
+| Use account in this directory | `linden accounts use <uuid> --scope local` |
 
-| Variable | Purpose |
-|---|---|
-| `LINDEN_BASE_URL` | API base URL (default `https://api.mylinden.family`) |
-| `LINDEN_ACCOUNT` | Override active account ID |
-| `LINDEN_NO_TUI` | Disable interactive TUI prompts and browser |
-| `LINDEN_NO_KEYRING` | Disable OS keyring for credential storage |
-| `LINDEN_TOKEN` | Static token bypass for CI only — do not use for interactive agents |
+## Domain rules
 
-Do not read `credentials.json` or keyring contents directly.
+- `linden auth login` opens a browser. Wait for the human. Do not scrape the callback URL or read stored tokens.
+- Default `accounts use` writes `~/.config/linden/config.json`. `--scope local` writes `.linden/config.json` in the current directory.
+- One-shot override without persisting: `--account <uuid>` on any command, or `LINDEN_ACCOUNT`.
+- When showing account details or statistics, read references/account-settings.md before `linden accounts show` or `linden accounts stats`.
+- `LINDEN_NO_KEYRING` disables the OS keyring. Do not read `credentials.json`.
+
+## On errors
+
+- When auth fails, read references/doctor.md before running another domain command.

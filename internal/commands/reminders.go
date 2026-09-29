@@ -121,6 +121,9 @@ func newRemindersCreateCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create a reminder for a person or pet",
+		Annotations: map[string]string{
+			"agent_notes": "Exactly one of --person or --pet is required",
+		},
 		Long: `Create a reminder associated with exactly one person or pet.
 
   linden reminders create --person <uuid> --name "Renew passport" --due-date 2026-12-01`,
@@ -174,6 +177,7 @@ func newRemindersCreateCmd() *cobra.Command {
 	cmd.Flags().StringVar(&name, "name", "", "Reminder name (required)")
 	cmd.Flags().StringVar(&notes, "notes", "", "Notes")
 	cmd.Flags().StringVar(&dueDate, "due-date", "", "Due date (YYYY-MM-DD, required)")
+	annotateFormat(cmd, "due-date", "YYYY-MM-DD")
 	cmd.Flags().BoolVar(&completed, "completed", false, "Create as completed")
 	cmd.Flags().StringVar(&repeatInterval, "repeat-interval", "", "Repeat interval")
 	cmd.Flags().IntVar(&remindBeforeDays, "remind-before-days", 0, "Days before due date to remind")
@@ -255,6 +259,7 @@ func newRemindersUpdateCmd() *cobra.Command {
 	cmd.Flags().StringVar(&name, "name", "", "Reminder name")
 	cmd.Flags().StringVar(&notes, "notes", "", "Notes")
 	cmd.Flags().StringVar(&dueDate, "due-date", "", "Due date (YYYY-MM-DD)")
+	annotateFormat(cmd, "due-date", "YYYY-MM-DD")
 	cmd.Flags().BoolVar(&completed, "completed", false, "Set completion status")
 	cmd.Flags().StringVar(&repeatInterval, "repeat-interval", "", "Repeat interval")
 	cmd.Flags().IntVar(&remindBeforeDays, "remind-before-days", 0, "Days before due date to remind")

@@ -18,5 +18,6 @@ find "$dest/skills" -name '*_test.go' -delete
 cp "$root/skills-publish/README.md" "$dest/README.md"
 cp "$root/skills-publish/install.md" "$dest/install.md"
 cp "$root/skills-publish/LICENSE" "$dest/LICENSE"
+cp "$root/skills-publish/CHANGELOG.md" "$dest/CHANGELOG.md"
 mkdir -p "$dest/.claude-plugin"
 cp "$root/skills-publish/.claude-plugin/plugin.json" "$dest/.claude-plugin/plugin.json"
