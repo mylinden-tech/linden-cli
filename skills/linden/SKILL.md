@@ -15,7 +15,7 @@ Drive the `linden` CLI. One slash command: `/linden`. There is no `/linden-remin
 ## Invocation
 
 - `/linden` with no argument → decision tree. Pick the reference from the routing table.
-- `/linden <domain>` → read that reference before any domain CLI command, then continue at step 4.
+- `/linden <domain>` → read that reference before any domain CLI command, then start the decision tree at step 1. At step 2, treat the domain as already chosen.
   The argument is the reference filename without `.md`: `/linden reminders` → `references/reminders.md`.
   Aliases: `auth` and `accounts` → `references/auth-and-accounts.md`; `settings` → `references/account-settings.md`; `shares` → `references/account-shares.md`.
   Unknown argument → say so. Do not invent a reference or a CLI group.
@@ -30,12 +30,13 @@ Drive the `linden` CLI. One slash command: `/linden`. There is no `/linden-remin
 
 1. CLI healthy in this session?
    No / unknown → `linden doctor --agent`. Failing → read references/doctor.md and follow its remediation. Do not run domain commands until doctor passes.
-2. Active account set?
-   No → `linden accounts list --json`; one account → use it; several → ask the user which.
-3. Domain already chosen by `/linden <domain>`?
+2. Domain already chosen by `/linden <domain>`?
    Yes → the Invocation section already named the reference. Read it if not read yet.
    No → routing table → read that reference BEFORE running any domain CLI command.
    No match → say the CLI does not support it.
+3. Does the selected command require an active account?
+   No, when the reference says this command does not → step 4.
+   Yes, and none is set → `linden accounts list --json`; one account → use it; several → ask the user which.
 4. Read, create, or change an existing record?
    Read → `list` / `show` with `--json` → summarize; never paste full PII unless asked.
    Create → step 6. There is no target UUID. If a same-name record already exists, show it and ask before creating another.

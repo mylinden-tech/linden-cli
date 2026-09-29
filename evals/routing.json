@@ -15,7 +15,7 @@
   {"prompt": "add our family doctor", "expect_read": ["references/contacts.md"]},
   {"prompt": "el teléfono del abogado", "expect_read": ["references/contacts.md"]},
   {"prompt": "remind me to renew the car insurance", "expect_read": ["references/reminders.md"]},
-  {"prompt": "recordame el cumpleaños del perro", "expect_read": ["references/reminders.md"]},
+  {"prompt": "recordame el cumpleaños del perro", "expect_read": ["references/reminders.md", "references/pets.md"]},
   {"prompt": "/linden reminders", "expect_read": ["references/reminders.md"]},
   {"prompt": "switch to the other family account", "expect_read": ["references/auth-and-accounts.md"]},
   {"prompt": "cerrar sesión", "expect_read": ["references/auth-and-accounts.md"]},

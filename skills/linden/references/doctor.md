@@ -1,6 +1,6 @@
 # Linden Doctor
 
-Diagnose CLI, auth, API, and active account. Do not dump config or credential files.
+Diagnose CLI, auth, API, and active account. Doctor does not require an active account. Do not dump config or credential files.
 
 ## Procedure
 

@@ -76,6 +76,52 @@ func TestTodoStatusValues(t *testing.T) {
 	t.Fatal("todos update is missing --status")
 }
 
+func TestAccountScopeValues(t *testing.T) {
+	root := NewRootCmd(BuildInfo{Version: "test"})
+	use, _, err := root.Find([]string{"accounts", "use"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	info := agentHelp(t, use)
+	for _, flag := range info.Flags {
+		if flag.Name != "scope" {
+			continue
+		}
+		if strings.Join(flag.Values, ",") != "global,local" {
+			t.Fatalf("scope values %v", flag.Values)
+		}
+		return
+	}
+	t.Fatal("accounts use is missing --scope")
+}
+
+func TestRemindBeforeDaysUsage(t *testing.T) {
+	root := NewRootCmd(BuildInfo{Version: "test"})
+	for _, args := range [][]string{{"reminders", "create"}, {"reminders", "update"}} {
+		cmd, _, err := root.Find(args)
+		if err != nil {
+			t.Fatal(err)
+		}
+		info := agentHelp(t, cmd)
+		usage := flagUsage(info.Flags, "remind-before-days")
+		if usage == "" {
+			t.Fatalf("%s is missing --remind-before-days", cmd.CommandPath())
+		}
+		if !strings.Contains(usage, "zero or greater") {
+			t.Fatalf("%s usage %q", cmd.CommandPath(), usage)
+		}
+	}
+}
+
+func flagUsage(flags []agentFlag, name string) string {
+	for _, flag := range flags {
+		if flag.Name == name {
+			return flag.Usage
+		}
+	}
+	return ""
+}
+
 func TestDeleteYesIsLocal(t *testing.T) {
 	root := NewRootCmd(BuildInfo{Version: "test"})
 	del, _, err := root.Find([]string{"persons", "delete"})

@@ -13,6 +13,7 @@ The hub decision tree already applies. This file covers only what is specific to
 
 ## Domain rules
 
+- `contacts types` does not require an active account. List, show, and search do.
 - Search requires a non-empty `--q`.
 - When the classification is unclear, run `linden contacts types --json` before describing the contact.
 - Contacts are read-only. Do not invent create, update, or delete commands.

@@ -109,6 +109,13 @@ func newRemindersShowCmd() *cobra.Command {
 	}
 }
 
+func nonnegativeRemindBefore(days int) error {
+	if days < 0 {
+		return output.ErrUsage("--remind-before-days must be zero or greater")
+	}
+	return nil
+}
+
 func newRemindersCreateCmd() *cobra.Command {
 	var (
 		personID, petID                      string
@@ -134,6 +141,9 @@ func newRemindersCreateCmd() *cobra.Command {
 			}
 			if (personID == "") == (petID == "") {
 				return output.ErrUsage("exactly one of --person or --pet is required")
+			}
+			if err := nonnegativeRemindBefore(remindBeforeDays); err != nil {
+				return err
 			}
 
 			req := client.ReminderCreateRequest{
@@ -180,7 +190,7 @@ func newRemindersCreateCmd() *cobra.Command {
 	annotateFormat(cmd, "due-date", "YYYY-MM-DD")
 	cmd.Flags().BoolVar(&completed, "completed", false, "Create as completed")
 	cmd.Flags().StringVar(&repeatInterval, "repeat-interval", "", "Repeat interval")
-	cmd.Flags().IntVar(&remindBeforeDays, "remind-before-days", 0, "Days before due date to remind")
+	cmd.Flags().IntVar(&remindBeforeDays, "remind-before-days", 0, "Days before due date to remind (zero or greater)")
 	cmd.Flags().StringVar(&reminderType, "reminder-type", "", "Reminder type")
 	_ = cmd.MarkFlagRequired("name")
 	_ = cmd.MarkFlagRequired("due-date")
@@ -228,6 +238,9 @@ func newRemindersUpdateCmd() *cobra.Command {
 				changed = true
 			}
 			if cmd.Flags().Changed("remind-before-days") {
+				if err := nonnegativeRemindBefore(remindBeforeDays); err != nil {
+					return err
+				}
 				req.RemindBeforeDays = &remindBeforeDays
 				changed = true
 			}
@@ -262,7 +275,7 @@ func newRemindersUpdateCmd() *cobra.Command {
 	annotateFormat(cmd, "due-date", "YYYY-MM-DD")
 	cmd.Flags().BoolVar(&completed, "completed", false, "Set completion status")
 	cmd.Flags().StringVar(&repeatInterval, "repeat-interval", "", "Repeat interval")
-	cmd.Flags().IntVar(&remindBeforeDays, "remind-before-days", 0, "Days before due date to remind")
+	cmd.Flags().IntVar(&remindBeforeDays, "remind-before-days", 0, "Days before due date to remind (zero or greater)")
 	cmd.Flags().StringVar(&reminderType, "reminder-type", "", "Reminder type")
 	return cmd
 }

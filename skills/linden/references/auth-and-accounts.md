@@ -15,6 +15,7 @@ The hub decision tree already applies. This file covers login and choosing an ac
 
 ## Domain rules
 
+- Login, status, logout, list, and use do not require an active account.
 - `linden auth login` opens a browser. Wait for the human. Do not scrape the callback URL or read stored tokens.
 - Default `accounts use` writes `~/.config/linden/config.json`. `--scope local` writes `.linden/config.json` in the current directory.
 - One-shot override without persisting: `--account <uuid>` on any command, or `LINDEN_ACCOUNT`.

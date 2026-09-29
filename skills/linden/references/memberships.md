@@ -12,6 +12,7 @@ The hub decision tree already applies. This file covers only what is specific to
 
 ## Domain rules
 
+- `memberships roles` does not require an active account. List and show do.
 - When the role name is unclear, run `linden memberships roles --json` before describing it.
 - Memberships are read-only. Do not invent update or delete commands.
 
