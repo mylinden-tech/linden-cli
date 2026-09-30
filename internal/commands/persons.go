@@ -126,11 +126,11 @@ func newPersonsShowCmd() *cobra.Command {
 func newPersonsCreateCmd() *cobra.Command {
 	var (
 		firstName, lastName, email, phone, notes string
-		birthday                                  string
-		addressStreet, addressApt, addressCity    string
-		addressState, addressZip, addressCountry  string
-		relationshipType                          string
-		isActive                                  bool
+		birthday                                 string
+		addressStreet, addressApt, addressCity   string
+		addressState, addressZip, addressCountry string
+		relationshipType                         string
+		isActive                                 bool
 	)
 
 	cmd := &cobra.Command{
@@ -218,6 +218,7 @@ When run interactively without required flags, a form is shown.
 	cmd.Flags().StringVar(&phone, "phone", "", "Phone number")
 	cmd.Flags().StringVar(&notes, "notes", "", "Notes")
 	cmd.Flags().StringVar(&birthday, "birthday", "", "Birthday (YYYY-MM-DD)")
+	annotateFormat(cmd, "birthday", "YYYY-MM-DD")
 	cmd.Flags().StringVar(&addressStreet, "address-street", "", "Street address")
 	cmd.Flags().StringVar(&addressApt, "address-apt", "", "Apt/suite")
 	cmd.Flags().StringVar(&addressCity, "address-city", "", "City")
@@ -232,11 +233,11 @@ When run interactively without required flags, a form is shown.
 func newPersonsUpdateCmd() *cobra.Command {
 	var (
 		firstName, lastName, email, phone, notes string
-		birthday                                  string
-		addressStreet, addressApt, addressCity    string
-		addressState, addressZip, addressCountry  string
-		relationshipType                          string
-		setActive, setInactive                    bool
+		birthday                                 string
+		addressStreet, addressApt, addressCity   string
+		addressState, addressZip, addressCountry string
+		relationshipType                         string
+		setActive, setInactive                   bool
 	)
 
 	cmd := &cobra.Command{
@@ -342,6 +343,7 @@ func newPersonsUpdateCmd() *cobra.Command {
 	cmd.Flags().StringVar(&phone, "phone", "", "Phone number")
 	cmd.Flags().StringVar(&notes, "notes", "", "Notes")
 	cmd.Flags().StringVar(&birthday, "birthday", "", "Birthday (YYYY-MM-DD)")
+	annotateFormat(cmd, "birthday", "YYYY-MM-DD")
 	cmd.Flags().StringVar(&addressStreet, "address-street", "", "Street address")
 	cmd.Flags().StringVar(&addressApt, "address-apt", "", "Apt/suite")
 	cmd.Flags().StringVar(&addressCity, "address-city", "", "City")

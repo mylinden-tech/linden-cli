@@ -109,6 +109,13 @@ func newRemindersShowCmd() *cobra.Command {
 	}
 }
 
+func nonnegativeRemindBefore(days int) error {
+	if days < 0 {
+		return output.ErrUsage("--remind-before-days must be zero or greater")
+	}
+	return nil
+}
+
 func newRemindersCreateCmd() *cobra.Command {
 	var (
 		personID, petID                      string
@@ -121,6 +128,9 @@ func newRemindersCreateCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create a reminder for a person or pet",
+		Annotations: map[string]string{
+			"agent_notes": "Exactly one of --person or --pet is required",
+		},
 		Long: `Create a reminder associated with exactly one person or pet.
 
   linden reminders create --person <uuid> --name "Renew passport" --due-date 2026-12-01`,
@@ -131,6 +141,9 @@ func newRemindersCreateCmd() *cobra.Command {
 			}
 			if (personID == "") == (petID == "") {
 				return output.ErrUsage("exactly one of --person or --pet is required")
+			}
+			if err := nonnegativeRemindBefore(remindBeforeDays); err != nil {
+				return err
 			}
 
 			req := client.ReminderCreateRequest{
@@ -174,9 +187,10 @@ func newRemindersCreateCmd() *cobra.Command {
 	cmd.Flags().StringVar(&name, "name", "", "Reminder name (required)")
 	cmd.Flags().StringVar(&notes, "notes", "", "Notes")
 	cmd.Flags().StringVar(&dueDate, "due-date", "", "Due date (YYYY-MM-DD, required)")
+	annotateFormat(cmd, "due-date", "YYYY-MM-DD")
 	cmd.Flags().BoolVar(&completed, "completed", false, "Create as completed")
 	cmd.Flags().StringVar(&repeatInterval, "repeat-interval", "", "Repeat interval")
-	cmd.Flags().IntVar(&remindBeforeDays, "remind-before-days", 0, "Days before due date to remind")
+	cmd.Flags().IntVar(&remindBeforeDays, "remind-before-days", 0, "Days before due date to remind (zero or greater)")
 	cmd.Flags().StringVar(&reminderType, "reminder-type", "", "Reminder type")
 	_ = cmd.MarkFlagRequired("name")
 	_ = cmd.MarkFlagRequired("due-date")
@@ -224,6 +238,9 @@ func newRemindersUpdateCmd() *cobra.Command {
 				changed = true
 			}
 			if cmd.Flags().Changed("remind-before-days") {
+				if err := nonnegativeRemindBefore(remindBeforeDays); err != nil {
+					return err
+				}
 				req.RemindBeforeDays = &remindBeforeDays
 				changed = true
 			}
@@ -255,9 +272,10 @@ func newRemindersUpdateCmd() *cobra.Command {
 	cmd.Flags().StringVar(&name, "name", "", "Reminder name")
 	cmd.Flags().StringVar(&notes, "notes", "", "Notes")
 	cmd.Flags().StringVar(&dueDate, "due-date", "", "Due date (YYYY-MM-DD)")
+	annotateFormat(cmd, "due-date", "YYYY-MM-DD")
 	cmd.Flags().BoolVar(&completed, "completed", false, "Set completion status")
 	cmd.Flags().StringVar(&repeatInterval, "repeat-interval", "", "Repeat interval")
-	cmd.Flags().IntVar(&remindBeforeDays, "remind-before-days", 0, "Days before due date to remind")
+	cmd.Flags().IntVar(&remindBeforeDays, "remind-before-days", 0, "Days before due date to remind (zero or greater)")
 	cmd.Flags().StringVar(&reminderType, "reminder-type", "", "Reminder type")
 	return cmd
 }

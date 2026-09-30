@@ -1,75 +1,88 @@
 ---
 name: linden
 description: |
-  This skill should be used when the user mentions Linden, mylinden, the linden CLI,
-  a Linden family account, or asks to inspect or change family data through Linden.
-  Pair with linden-persons for people or family members.
-  Pair with linden-contacts for contacts.
-  Pair with linden-memberships for account memberships and roles.
-  Pair with linden-invitations for pending account invitations.
-  Pair with linden-account-shares for resource shares.
-  Pair with linden-account-settings for account details, statistics, or user settings.
-  Pair with linden-pets for pets.
-  Pair with linden-reminders for reminders.
-  Pair with linden-todos for todos and todo lists.
-  Pair with linden-vehicles, linden-real-estates, linden-online-accounts,
-  linden-insurances, linden-wills, or linden-share-links for those read domains.
-  Pair with linden-doctor for login, setup, doctor, or a failing CLI.
+  Use when the user mentions Linden, mylinden, the linden CLI, or a Linden family
+  account, or wants to view or change family data stored in Linden: people, contacts,
+  pets, vehicles, homes, insurance, wills, reminders, todos, account members, invitations,
+  or sharing.
+argument-hint: "[domain]"
 ---
 
 # Linden
 
-Drive the `linden` CLI. Do not call `https://api.mylinden.family` over HTTP. Do not invent command groups.
+Drive the `linden` CLI. One slash command: `/linden`. There is no `/linden-reminders` or other domain command.
 
-## Invariants
+## Invocation
 
-1. If this session has not already proven a healthy CLI, run `linden doctor --agent` before listing or mutating domain data. Load `linden-doctor` to interpret the result.
-2. Prefer `--agent` for data-only JSON. Use `--json` alone when `summary` or `breadcrumbs` are needed (`--jq` drops the envelope even with `--json`). Use `--md` when presenting to a human. Filter `data` with `--jq '<expr>'` or `--json --jq '<expr>'`. Never pipe to external `jq`. Never combine `--agent --jq` (jq is ignored).
-3. Follow `breadcrumbs` from the last `--json` response. Do not guess the next command.
-4. Domain commands require an active account: `linden accounts use <id>` or `--account` / `LINDEN_ACCOUNT`. IDs are UUIDs.
-5. If the routing table has no match, say the CLI has no such resource. Do not invent resource command groups.
-6. Do not read credential files, the OS keyring, or print `LINDEN_TOKEN`.
-7. Destructive commands require a UUID observed in this session and `--yes`.
-8. After a passing doctor, skip doctor for later domain commands in this thread. Re-run doctor after a setup-shaped error (`auth`, `account`, unreachable API).
+- `/linden` with no argument → decision tree. Pick the reference from the routing table.
+- `/linden <domain>` → read that reference before any domain CLI command, then start the decision tree at step 1. At step 2, treat the domain as already chosen.
+  The argument is the reference filename without `.md`: `/linden reminders` → `references/reminders.md`.
+  Aliases: `auth` and `accounts` → `references/auth-and-accounts.md`; `settings` → `references/account-settings.md`; `shares` → `references/account-shares.md`.
+  Unknown argument → say so. Do not invent a reference or a CLI group.
 
-See [references/envelope.md](references/envelope.md) for output modes and [references/auth-and-accounts.md](references/auth-and-accounts.md) for login and accounts.
+## Session rules
+
+- Do not call the Linden API over HTTP. Do not invent command groups.
+- Set `LINDEN_NO_TUI=1` for the session. Persons list and create open a TUI when stdout is a TTY and this variable is unset.
+- Do not read credential files or the OS keyring, and do not print `LINDEN_TOKEN`.
+
+## Decision tree (every request)
+
+1. CLI healthy in this session?
+   No / unknown → `linden doctor --agent`. Failing → read references/doctor.md and follow its remediation. Do not run domain commands until doctor passes.
+2. Domain already chosen by `/linden <domain>`?
+   Yes → the Invocation section already named the reference. Read it if not read yet.
+   No → routing table → read that reference BEFORE running any domain CLI command.
+   No match → say the CLI does not support it.
+3. Does the selected command require an active account?
+   No, when the reference says this command does not → step 4.
+   Yes, and none is set → `linden accounts list --json`; one account → use it; several → ask the user which.
+4. Read, create, or change an existing record?
+   Read → `list` / `show` with `--json` → summarize; never paste full PII unless asked.
+   Create → step 7. There is no target UUID. If a same-name record already exists, show it and ask before creating another.
+   Update, or any command that needs an existing id → step 5, then step 7.
+   Delete, revoke, unshare, or remove a member → step 6. Stop. Do not continue to step 7.
+5. Target UUID observed in this session?
+   No → `linden <domain> list --json` and match by name.
+        0 matches → ask the user. Do not create a record.
+        More than 1 match → show the candidates and ask which one.
+        Exactly 1 match → use it.
+6. Destructive (delete, revoke, unshare, remove member)?
+   Yes → do not run the command, and do not pass `--yes`. Tell the user, politely, that deleting records, revoking access, unsharing, and removing members is not supported here.
+7. Execute with `--json` so the envelope includes `breadcrumbs`. Follow `breadcrumbs`, then verify with `show` when the breadcrumb says to. Report the result.
+   Use `--agent` for `linden doctor` and for payload-only reads that do not need breadcrumbs.
 
 ## Routing
 
-- Setup, login, CLI broken → load `linden-doctor`
-- Auth status / login / logout → `linden auth status --agent`, `linden auth login`, or `linden auth logout`
-- Account details, statistics, or user settings → load `linden-account-settings`
-- List or switch accounts → `linden accounts list --json` then `linden accounts use <id>`
-- People and family members → load `linden-persons`
-- Contacts → load `linden-contacts`
-- Account memberships and roles → load `linden-memberships`
-- Pending account invitations → load `linden-invitations`
-- Account resource shares → load `linden-account-shares`
-- Pets → load `linden-pets`
-- Reminders → load `linden-reminders`
-- Todos and todo lists → load `linden-todos`
-- Vehicles → load `linden-vehicles`
-- Real estate → load `linden-real-estates`
-- Online accounts → load `linden-online-accounts`
-- Insurance policies and providers → load `linden-insurances`
-- Wills → load `linden-wills`
-- Resource-specific share links → load `linden-share-links`
-- Documents, passports, SSNs, files, driver licenses, birth certificates, body memorial wishes, legacy messages, and contact-import → not in the CLI; say so
+| User talks about… | Read |
+|---|---|
+| login, setup, CLI not working, linden doctor | references/doctor.md |
+| switch account, which account, log out | references/auth-and-accounts.md |
+| person, family member, relative, sister, son, birthday, relationship | references/persons.md |
+| contact, phone book, family doctor, lawyer | references/contacts.md |
+| who has access, member, role, admin | references/memberships.md |
+| invite, pending invitation | references/invitations.md |
+| share with someone, shared resource | references/account-shares.md |
+| share link, public link | references/share-links.md |
+| account name, statistics, my settings | references/account-settings.md |
+| pet, dog, cat, vet | references/pets.md |
+| reminder, remind me | references/reminders.md |
+| todo, task, checklist, todo list | references/todos.md |
+| car, vehicle, plate, VIN | references/vehicles.md |
+| house, home, property, real estate | references/real-estates.md |
+| online account, website login, subscription | references/online-accounts.md |
+| insurance, policy, provider, coverage | references/insurances.md |
+| will, testament, executor | references/wills.md |
+| documents, passport, SSN, driver license, birth certificate, legacy messages, memorial wishes, contact import | Not in the CLI. Say so. |
 
-## Cheat sheet
+A family doctor or lawyer is a contact. The doctor row is the CLI doctor.
 
-```bash
-linden doctor --agent
-linden auth login
-linden auth status --agent
-linden auth logout
-linden accounts list --json
-linden accounts use <uuid>
-linden accounts use <uuid> --scope local
-```
+Read a second reference only when the command needs an id from that domain (for example, an insurance policy linked to a vehicle). A reminder about car insurance reads references/reminders.md only.
 
-Set `LINDEN_NO_TUI=1` if a TTY might open a form or persons browser.
+## Output modes
+
+When choosing between `--agent`, `--json`, `--md`, or `--jq`, read references/envelope.md before picking a flag.
 
 ## Safety
 
-Prefer `--agent` and summarize PII (names, emails, phones, addresses, birthdays) for the human. Do not paste full contact dumps unless asked. CLI only.
+Summarize PII (names, emails, phones, addresses, birthdays). Do not paste full lists unless asked.

@@ -1,13 +1,6 @@
----
-name: linden-doctor
-description: |
-  This skill should be used when the user asks to run Linden doctor, diagnose the Linden CLI,
-  fix Linden login, or reports that Linden, auth, or the active account is not working.
----
-
 # Linden Doctor
 
-Diagnose CLI, auth, API, and active account. Do not dump config or credential files.
+Diagnose CLI, auth, API, and active account. Doctor does not require an active account. Do not dump config or credential files.
 
 ## Procedure
 

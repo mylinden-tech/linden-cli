@@ -114,6 +114,7 @@ func NewRootCmd(info BuildInfo) *cobra.Command {
 		commands.NewDoctorCmd(),
 	)
 
+	installAgentHelp(cmd)
 	return cmd
 }
 

@@ -10,6 +10,19 @@ import (
 	"github.com/mylinden-tech/linden-cli/internal/output"
 )
 
+const (
+	annotationEnum   = "linden_enum"
+	annotationFormat = "linden_format"
+)
+
+func annotateEnum(cmd *cobra.Command, name string, values []string) {
+	_ = cmd.Flags().SetAnnotation(name, annotationEnum, values)
+}
+
+func annotateFormat(cmd *cobra.Command, name, format string) {
+	_ = cmd.Flags().SetAnnotation(name, annotationFormat, []string{format})
+}
+
 // isMachineOutput returns true when output should be machine-readable.
 func isMachineOutput(cmd *cobra.Command) bool {
 	if app := appctx.FromContext(cmd.Context()); app != nil {

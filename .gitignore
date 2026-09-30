@@ -39,6 +39,8 @@ result
 
 .publish-staging/
 publish-staging/
+skills-lock.json
+.agents/*
 
 # Local Cursor skill symlinks used for dogfooding (canonical skills live in skills/).
 # Shared Cursor rules under .cursor/rules/ are tracked.

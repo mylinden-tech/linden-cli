@@ -10,6 +10,17 @@ import (
 	"github.com/mylinden-tech/linden-cli/internal/output"
 )
 
+var accountScopes = []string{"global", "local"}
+
+func validAccountScope(scope string) bool {
+	for _, allowed := range accountScopes {
+		if scope == allowed {
+			return true
+		}
+	}
+	return false
+}
+
 // NewAccountsCmd creates the accounts command group.
 func NewAccountsCmd() *cobra.Command {
 	cmd := &cobra.Command{
@@ -128,7 +139,7 @@ func newAccountsUseCmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			app := appctx.FromContext(cmd.Context())
 
-			if scope != "global" && scope != "local" {
+			if !validAccountScope(scope) {
 				return output.ErrUsage(`--scope must be "global" or "local"`)
 			}
 
@@ -177,5 +188,6 @@ func newAccountsUseCmd() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&scope, "scope", "global", `Config scope: "global" or "local"`)
+	annotateEnum(cmd, "scope", accountScopes)
 	return cmd
 }

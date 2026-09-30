@@ -223,13 +223,13 @@ Use `--jq '<expr>'` to filter JSON without piping to external `jq`. Use `--md` w
 
 ### Agent skills
 
-Install [Agent Skills](https://agentskills.io) so coding agents know how to drive the CLI. Approve/install all three skills (`linden`, `linden-doctor`, `linden-persons`) in one shot:
+Install [Agent Skills](https://agentskills.io) so coding agents know how to drive the CLI. One skill, `linden`, covers every supported domain. Invoke it as `/linden` or `/linden reminders` (the argument names the reference).
 
 ```sh
 npx skills add mylinden-tech/skills --skill '*' -y
 ```
 
-Restart the agent session after install. Skills live in this repo under [skills/](skills/); start with [skills/linden/SKILL.md](skills/linden/SKILL.md) (orchestrator), plus `linden-doctor` and `linden-persons` for setup and people management. See [skills-publish/install.md](skills-publish/install.md) for agent targeting, local staging, and the optional Claude Code plugin path.
+Restart the agent session after install. The skill lives in this repo under [skills/linden/SKILL.md](skills/linden/SKILL.md). See [skills-publish/install.md](skills-publish/install.md) for agent targeting, local staging, and the optional Claude Code plugin path.
 
 Run `linden doctor` first when diagnosing auth, API, or account configuration.
 
@@ -258,7 +258,7 @@ make tidy    # tidy go.mod/go.sum
 - `internal/tui` / `internal/tui/persons` — interactive TUI (forms, confirmations, persons browser)
 - `internal/output` — response envelope and error formatting (JSON/Markdown/styled)
 - `internal/appctx` — request-scoped app context
-- `skills/` — Agent Skills for coding agents (`linden`, `linden-doctor`, `linden-persons`)
+- `skills/` — Agent Skill `linden` and its references
 - `skills-publish/` — templates and manifest for the public `mylinden-tech/skills` repo
 
 
