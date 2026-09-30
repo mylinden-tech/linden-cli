@@ -10,7 +10,6 @@ The hub decision tree already applies. This file covers only what is specific to
 | Show | `linden persons show <uuid> --json` |
 | Create | `linden persons create --first-name … --last-name … --json` |
 | Update | `linden persons update <uuid> --json` |
-| Delete | `linden persons delete <uuid> --yes --json` |
 
 ## Fields
 
@@ -20,6 +19,7 @@ It is the source of truth for flags and allowed values.
 ## Domain rules
 
 - Required on create: `--first-name` and `--last-name`.
+- Deleting a person is not supported. If asked, say so politely and do not run a delete command.
 - When showing a copy-paste create or name-resolution recipe, read references/persons-examples.md before building the command.
 
 ## On errors

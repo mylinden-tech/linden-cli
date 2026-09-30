@@ -12,7 +12,6 @@ The hub decision tree already applies. This file covers only what is specific to
 | Show a todo | `linden todos show <uuid> --json` |
 | Create a todo | `linden todos create --list <uuid> --title … --json` |
 | Update a todo | `linden todos update <uuid> --json` |
-| Delete a todo | `linden todos delete <uuid> --yes --json` |
 
 ## Fields
 
@@ -23,6 +22,7 @@ It is the source of truth for flags and allowed values.
 
 - Run `linden todos lists --json` before creating a todo and use an observed list id.
 - If no suitable list exists, create one with `linden todos create-list`, then follow its breadcrumb.
+- Deleting a todo is not supported. If asked, say so politely and do not run a delete command.
 - Star and unstar are not supported.
 
 ## On errors

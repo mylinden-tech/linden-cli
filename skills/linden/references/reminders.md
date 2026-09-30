@@ -12,7 +12,6 @@ The hub decision tree already applies. This file covers only what is specific to
 | Create for a pet | `linden reminders create --pet <uuid> --name … --due-date YYYY-MM-DD --json` |
 | Update | `linden reminders update <uuid> --json` |
 | Complete | `linden reminders complete <uuid> --json` |
-| Delete | `linden reminders delete <uuid> --yes --json` |
 
 ## Fields
 
@@ -22,6 +21,7 @@ It is the source of truth for flags and allowed values.
 ## Domain rules
 
 - Creation targets a person or a pet. Do not invent an account-scoped create.
+- Deleting a reminder is not supported. If asked, say so politely and do not run a delete command.
 - Use `complete` to mark done. Reopen with `linden reminders update <uuid> --completed=false --json`.
 - Resolve the person or pet id from that domain before create. When the target is a person, read references/persons.md before `linden reminders create --person`. When the target is a pet, read references/pets.md before `linden reminders create --pet`.
 

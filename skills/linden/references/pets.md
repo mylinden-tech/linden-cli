@@ -10,7 +10,6 @@ The hub decision tree already applies. This file covers only what is specific to
 | Show | `linden pets show <uuid> --json` |
 | Create | `linden pets create --name … --species … --json` |
 | Update | `linden pets update <uuid> --json` |
-| Delete | `linden pets delete <uuid> --yes --json` |
 
 ## Fields
 
@@ -20,6 +19,7 @@ It is the source of truth for flags and allowed values.
 ## Domain rules
 
 - Required on create: `--name` and `--species`.
+- Deleting a pet is not supported. If asked, say so politely and do not run a delete command.
 - Summarize microchip numbers unless the user asks for them.
 
 ## On errors

@@ -39,15 +39,16 @@ Drive the `linden` CLI. One slash command: `/linden`. There is no `/linden-remin
    Yes, and none is set → `linden accounts list --json`; one account → use it; several → ask the user which.
 4. Read, create, or change an existing record?
    Read → `list` / `show` with `--json` → summarize; never paste full PII unless asked.
-   Create → step 6. There is no target UUID. If a same-name record already exists, show it and ask before creating another.
-   Update, delete, or any command that needs an existing id → step 5.
+   Create → step 7. There is no target UUID. If a same-name record already exists, show it and ask before creating another.
+   Update, or any command that needs an existing id → step 5, then step 7.
+   Delete, revoke, unshare, or remove a member → step 6. Stop. Do not continue to step 7.
 5. Target UUID observed in this session?
    No → `linden <domain> list --json` and match by name.
         0 matches → ask the user. Do not create a record.
         More than 1 match → show the candidates and ask which one.
         Exactly 1 match → use it.
 6. Destructive (delete, revoke, unshare, remove member)?
-   Yes → confirm with the user, naming the record → run with `--yes`.
+   Yes → do not run the command, and do not pass `--yes`. Tell the user, politely, that deleting records, revoking access, unsharing, and removing members is not supported here.
 7. Execute with `--json` so the envelope includes `breadcrumbs`. Follow `breadcrumbs`, then verify with `show` when the breadcrumb says to. Report the result.
    Use `--agent` for `linden doctor` and for payload-only reads that do not need breadcrumbs.
 
