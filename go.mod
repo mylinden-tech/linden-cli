@@ -1,10 +1,10 @@
 module github.com/mylinden-tech/linden-cli
 
-go 1.26.6
+go 1.26.7
 
 require (
 	charm.land/bubbletea/v2 v2.1.1
-	charm.land/lipgloss/v2 v2.0.6
+	charm.land/lipgloss/v2 v2.1.0
 	github.com/charmbracelet/bubbles v1.0.0
 	github.com/charmbracelet/huh v1.0.0
 	github.com/itchyny/gojq v0.12.20
