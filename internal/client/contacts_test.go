@@ -130,3 +130,33 @@ func TestListContactTypes(t *testing.T) {
 		t.Fatalf("types = %+v", types)
 	}
 }
+
+func TestContactAddressFields(t *testing.T) {
+	t.Parallel()
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_ = json.NewEncoder(w).Encode(map[string]any{
+			"id": "c1", "first_name": "Ana", "last_name": "Ruiz",
+			"address_street": "Calle Mayor 1", "address_apt": "2B",
+			"address_city": "Madrid", "address_state": "Madrid",
+			"address_zip": "28013", "address_country": "ES",
+		})
+	}))
+	defer srv.Close()
+
+	c := New(srv.URL, staticToken("t"))
+	contact, err := c.GetContact(context.Background(), "c1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := []*string{
+		contact.AddressStreet, contact.AddressApt, contact.AddressCity,
+		contact.AddressState, contact.AddressZip, contact.AddressCountry,
+	}
+	want := []string{"Calle Mayor 1", "2B", "Madrid", "Madrid", "28013", "ES"}
+	for i, value := range got {
+		if value == nil || *value != want[i] {
+			t.Errorf("field %d = %v, want %q", i, value, want[i])
+		}
+	}
+}

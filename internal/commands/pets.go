@@ -116,7 +116,7 @@ func newPetsCreateCmd() *cobra.Command {
 		Short: "Create a new pet",
 		Long: `Create a new pet in the active account.
 
-  linden pets create --name "Rex" --species dog --breed "Golden Retriever"`,
+  linden pets create --name "Rex" --species dog --breed "Golden Retriever" --weight "30 kg"`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			app := appctx.FromContext(cmd.Context())
 
@@ -132,8 +132,14 @@ func newPetsCreateCmd() *cobra.Command {
 				Notes:           strPtr(notes),
 				BirthDate:       strPtr(birthDate),
 				MicrochipNumber: strPtr(microchip),
-				Weight:          strPtr(weight),
 				IsActive:        isActive,
+			}
+			if cmd.Flags().Changed("weight") {
+				parsed, err := parseWeight(weight)
+				if err != nil {
+					return err
+				}
+				req.Weight = parsed
 			}
 
 			pet, err := app.Client.CreatePet(
@@ -164,7 +170,7 @@ func newPetsCreateCmd() *cobra.Command {
 	cmd.Flags().StringVar(&birthDate, "birth-date", "", "Birth date (YYYY-MM-DD)")
 	annotateFormat(cmd, "birth-date", "YYYY-MM-DD")
 	cmd.Flags().StringVar(&microchip, "microchip", "", "Microchip number")
-	cmd.Flags().StringVar(&weight, "weight", "", "Weight")
+	cmd.Flags().StringVar(&weight, "weight", "", weightHelp)
 	cmd.Flags().BoolVar(&isActive, "is-active", true, "Mark pet as active")
 	_ = cmd.MarkFlagRequired("name")
 	_ = cmd.MarkFlagRequired("species")
@@ -219,7 +225,11 @@ func newPetsUpdateCmd() *cobra.Command {
 				changed = true
 			}
 			if cmd.Flags().Changed("weight") {
-				req.Weight = strPtr(weight)
+				parsed, err := parseWeight(weight)
+				if err != nil {
+					return err
+				}
+				req.Weight = parsed
 				changed = true
 			}
 			if cmd.Flags().Changed("is-active") {
@@ -257,7 +267,7 @@ func newPetsUpdateCmd() *cobra.Command {
 	cmd.Flags().StringVar(&birthDate, "birth-date", "", "Birth date (YYYY-MM-DD)")
 	annotateFormat(cmd, "birth-date", "YYYY-MM-DD")
 	cmd.Flags().StringVar(&microchip, "microchip", "", "Microchip number")
-	cmd.Flags().StringVar(&weight, "weight", "", "Weight")
+	cmd.Flags().StringVar(&weight, "weight", "", weightHelp)
 	cmd.Flags().BoolVar(&isActive, "is-active", true, "Set whether pet is active")
 	return cmd
 }

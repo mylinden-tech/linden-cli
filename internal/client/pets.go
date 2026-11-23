@@ -8,49 +8,49 @@ import (
 
 // Pet represents a pet within an account.
 type Pet struct {
-	Name            string  `json:"name"`
-	Species         string  `json:"species"`
-	Breed           *string `json:"breed,omitempty"`
-	Color           *string `json:"color,omitempty"`
-	IsActive        bool    `json:"is_active"`
-	Notes           *string `json:"notes,omitempty"`
-	BirthDate       *string `json:"birth_date,omitempty"`
-	MicrochipNumber *string `json:"microchip_number,omitempty"`
-	Weight          *string `json:"weight,omitempty"`
-	AccountID       string  `json:"account_id"`
-	Avatar          *string `json:"avatar,omitempty"`
-	CreatedByID     string  `json:"created_by_id"`
-	ID              string  `json:"id"`
-	AvatarURL       *string `json:"avatar_url,omitempty"`
-	CreatedBy       any     `json:"created_by,omitempty"`
+	Name            string       `json:"name"`
+	Species         string       `json:"species"`
+	Breed           *string      `json:"breed,omitempty"`
+	Color           *string      `json:"color,omitempty"`
+	IsActive        bool         `json:"is_active"`
+	Notes           *string      `json:"notes,omitempty"`
+	BirthDate       *string      `json:"birth_date,omitempty"`
+	MicrochipNumber *string      `json:"microchip_number,omitempty"`
+	Weight          *Measurement `json:"weight,omitempty"`
+	AccountID       string       `json:"account_id"`
+	Avatar          *string      `json:"avatar,omitempty"`
+	CreatedByID     string       `json:"created_by_id"`
+	ID              string       `json:"id"`
+	AvatarURL       *string      `json:"avatar_url,omitempty"`
+	CreatedBy       any          `json:"created_by,omitempty"`
 }
 
 // PetCreateRequest is the payload for creating a pet.
 type PetCreateRequest struct {
-	Name            string  `json:"name"`
-	Species         string  `json:"species"`
-	Breed           *string `json:"breed,omitempty"`
-	Color           *string `json:"color,omitempty"`
-	IsActive        bool    `json:"is_active"`
-	Notes           *string `json:"notes,omitempty"`
-	BirthDate       *string `json:"birth_date,omitempty"`
-	MicrochipNumber *string `json:"microchip_number,omitempty"`
-	Weight          *string `json:"weight,omitempty"`
-	Avatar          *string `json:"avatar,omitempty"`
+	Name            string            `json:"name"`
+	Species         string            `json:"species"`
+	Breed           *string           `json:"breed,omitempty"`
+	Color           *string           `json:"color,omitempty"`
+	IsActive        bool              `json:"is_active"`
+	Notes           *string           `json:"notes,omitempty"`
+	BirthDate       *string           `json:"birth_date,omitempty"`
+	MicrochipNumber *string           `json:"microchip_number,omitempty"`
+	Weight          *MeasurementInput `json:"weight,omitempty"`
+	Avatar          *string           `json:"avatar,omitempty"`
 }
 
 // PetUpdateRequest is the payload for updating a pet.
 type PetUpdateRequest struct {
-	Name            *string `json:"name,omitempty"`
-	Species         *string `json:"species,omitempty"`
-	Breed           *string `json:"breed,omitempty"`
-	Color           *string `json:"color,omitempty"`
-	IsActive        *bool   `json:"is_active,omitempty"`
-	Notes           *string `json:"notes,omitempty"`
-	BirthDate       *string `json:"birth_date,omitempty"`
-	MicrochipNumber *string `json:"microchip_number,omitempty"`
-	Weight          *string `json:"weight,omitempty"`
-	Avatar          *string `json:"avatar,omitempty"`
+	Name            *string           `json:"name,omitempty"`
+	Species         *string           `json:"species,omitempty"`
+	Breed           *string           `json:"breed,omitempty"`
+	Color           *string           `json:"color,omitempty"`
+	IsActive        *bool             `json:"is_active,omitempty"`
+	Notes           *string           `json:"notes,omitempty"`
+	BirthDate       *string           `json:"birth_date,omitempty"`
+	MicrochipNumber *string           `json:"microchip_number,omitempty"`
+	Weight          *MeasurementInput `json:"weight,omitempty"`
+	Avatar          *string           `json:"avatar,omitempty"`
 }
 
 // ListPets returns pets under an account with optional pagination.

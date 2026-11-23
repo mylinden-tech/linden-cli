@@ -152,3 +152,38 @@ func TestDeletePet(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestPetWeightIsAMeasurement(t *testing.T) {
+	t.Parallel()
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatal(err)
+		}
+		want := map[string]any{"value": "25", "unit": "lb"}
+		if weight, _ := body["weight"].(map[string]any); weight["value"] != want["value"] || weight["unit"] != want["unit"] || len(weight) != 2 {
+			t.Errorf("weight sent = %v, want %v", body["weight"], want)
+		}
+		_ = json.NewEncoder(w).Encode(map[string]any{
+			"id": "p1", "name": "Rex", "species": "dog",
+			"weight": map[string]any{
+				"value": "25", "unit": "lb",
+				"display_value": "11.3", "display_unit": "kg",
+			},
+		})
+	}))
+	defer srv.Close()
+
+	c := New(srv.URL, staticToken("t"))
+	pet, err := c.UpdatePet(context.Background(), "p1", PetUpdateRequest{
+		Weight: &MeasurementInput{Value: "25", Unit: "lb"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := Measurement{Value: "25", Unit: "lb", DisplayValue: "11.3", DisplayUnit: "kg"}
+	if pet.Weight == nil || *pet.Weight != want {
+		t.Fatalf("weight = %+v, want %+v", pet.Weight, want)
+	}
+}

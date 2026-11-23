@@ -8,32 +8,32 @@ import (
 
 // Contact represents a contact within an account.
 type Contact struct {
-	ID           string  `json:"id"`
-	FirstName    string  `json:"first_name"`
-	MiddleName   *string `json:"middle_name,omitempty"`
-	LastName     string  `json:"last_name"`
-	Company      *string `json:"company,omitempty"`
-	Job          *string `json:"job,omitempty"`
-	ContactType  string  `json:"contact_type"`
-	PhoneType    string  `json:"phone_type"`
-	Phone        *string `json:"phone,omitempty"`
-	Email        *string `json:"email,omitempty"`
-	Website      *string `json:"website,omitempty"`
-	AddressLine1 *string `json:"address_line_1,omitempty"`
-	AddressLine2 *string `json:"address_line_2,omitempty"`
-	City         *string `json:"city,omitempty"`
-	State        *string `json:"state,omitempty"`
-	ZipCode      *string `json:"zip_code,omitempty"`
-	Country      *string `json:"country,omitempty"`
-	Notes        *string `json:"notes,omitempty"`
-	IsActive     bool    `json:"is_active"`
-	AccountID    string  `json:"account_id"`
-	CreatedByID  string  `json:"created_by_id"`
-	Avatar       *string `json:"avatar,omitempty"`
-	CreatedAt    string  `json:"created_at,omitempty"`
-	UpdatedAt    string  `json:"updated_at,omitempty"`
-	AvatarURL    *string `json:"avatar_url,omitempty"`
-	CreatedBy    any     `json:"created_by,omitempty"`
+	ID             string  `json:"id"`
+	FirstName      string  `json:"first_name"`
+	MiddleName     *string `json:"middle_name,omitempty"`
+	LastName       string  `json:"last_name"`
+	Company        *string `json:"company,omitempty"`
+	Job            *string `json:"job,omitempty"`
+	ContactType    string  `json:"contact_type"`
+	PhoneType      string  `json:"phone_type"`
+	Phone          *string `json:"phone,omitempty"`
+	Email          *string `json:"email,omitempty"`
+	Website        *string `json:"website,omitempty"`
+	AddressStreet  *string `json:"address_street,omitempty"`
+	AddressApt     *string `json:"address_apt,omitempty"`
+	AddressCity    *string `json:"address_city,omitempty"`
+	AddressState   *string `json:"address_state,omitempty"`
+	AddressZip     *string `json:"address_zip,omitempty"`
+	AddressCountry *string `json:"address_country,omitempty"` // ISO 3166-1 alpha-2
+	Notes          *string `json:"notes,omitempty"`
+	IsActive       bool    `json:"is_active"`
+	AccountID      string  `json:"account_id"`
+	CreatedByID    string  `json:"created_by_id"`
+	Avatar         *string `json:"avatar,omitempty"`
+	CreatedAt      string  `json:"created_at,omitempty"`
+	UpdatedAt      string  `json:"updated_at,omitempty"`
+	AvatarURL      *string `json:"avatar_url,omitempty"`
+	CreatedBy      any     `json:"created_by,omitempty"`
 }
 
 // ContactType represents an available contact classification.
