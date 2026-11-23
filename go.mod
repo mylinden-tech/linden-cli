@@ -1,6 +1,6 @@
 module github.com/mylinden-tech/linden-cli
 
-go 1.26.7
+go 1.26.11
 
 require (
 	charm.land/bubbletea/v2 v2.1.1
